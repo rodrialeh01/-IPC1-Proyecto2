@@ -12,7 +12,7 @@ CORS(app)
 
 #Se crea una lista de usuarios
 Usuarios = []
-
+#Se define al usuario Administrador
 Usuarios.append(Usuario("Abner Cardona","M","admin","admin@ipc1.com","admin@ipc1"))
 
 #METODO PARA MOSTRAR AL INICIO DEL BACKEND
@@ -101,18 +101,19 @@ def VerificarUsuarios(us,contra):
 @app.route('/Usuarios/Modificar/<string:user>',methods=['PUT'])
 def ActualizarUsuario(user):
     global Usuarios
+    nombre = request.json['name']
+    genero = request.json['gender']
+    correo = request.json['email']
+    contraseña = request.json['password']
     for i in range(len(Usuarios)):
-        if user == Usuarios[i].getUser():
-            nombre = request.json['name']
-            genero = request.json['gender']
-            correo = request.json['email']
-            contraseña = request.json['password']
+        if str(user) == str(Usuarios[i].getUser()):
             if cantidadpassword(contraseña) == True:
                 if genero == "M" or genero =="F" or genero=="m" or genero=="f":
                     Usuarios[i].setNombre(nombre)
                     Usuarios[i].setGenero(genero)
                     Usuarios[i].setCorreo(correo)
                     Usuarios[i].setContraseña(contraseña)
+                    return jsonify({'Mensaje':'Se actulizó correctamente el usuario'})
                 else:
                     return jsonify({'Mensaje': 'Unicamente puede poner "M", "m", "F" o "f" en el genero'})
             else:
@@ -127,7 +128,7 @@ def RetornarUsuario(user):
     for Usuario in Usuarios:
         if Usuario.getUser():
             objeto = {
-                'name': Usuario.getName(),
+                'name': Usuario.getNombre(),
                 'user': Usuario.getUser(),
                 'password': Usuario.getContraseña(),
                 'gender': Usuario.getGenero(),
