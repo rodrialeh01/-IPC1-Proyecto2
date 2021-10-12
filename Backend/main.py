@@ -2,7 +2,6 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import json
-import re
 
 #Llamar a la clase
 from Usuario import Usuario
