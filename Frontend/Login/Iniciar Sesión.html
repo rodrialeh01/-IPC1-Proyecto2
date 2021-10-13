@@ -116,11 +116,12 @@ Coded by www.creative-tim.com
         .then(response => {
           console.log(response);
           alert(response.Mensaje)
-          if (response.Tipo=='Usuario'){
+          if (response.Tipo=='Usuario' && response.Login=='true'){
             console.log('hola usuario')
-          }else if(response.Tipo=='Administrador'){
+          }else if(response.Tipo=='Administrador' && response.Login=='true'){
             console.log('hola admin')
-          }else if(response.Tipo=='Error'){
+            location.href = "../Admin/Admin_Principal.html"
+          }else if(response.Tipo=='Error' && response.Login=='false'){
             console.log('jaja adios XD')
           }
         })
