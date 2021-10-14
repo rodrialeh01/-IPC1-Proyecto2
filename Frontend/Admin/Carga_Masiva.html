@@ -112,23 +112,32 @@
           <div class="row">
           </div>
           </div>
-          <div class="row">
-            <div class="col-lg-6 col-md-12">
-              <div class="card">
-                <div class="card-header card-header-primary">
-                  <h4 class="card-title">Bienvenido Administrador</h4>
-                  <p class="card-category">UBlog</p>
-                </div>
-              </div>
+          <div class="content">
+            <div class="container-fluid">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link" id="usuarios-tab" data-toggle="tab" href="#usuarios" role="tab" aria-controls="usuarios" aria-selected="true">Usuarios</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="publicaciones-tab" data-toggle="tab" href="#publicaciones" role="tab" aria-controls="publicaciones" aria-selected="false">Publicaciones</a>
+                  </li>
+                </ul>
+                  <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade" id="usuarios" role="tabpanel" aria-labelledby="usuarios-tab" style="width: 50%; padding-left: 400px;">
+                        
+                      <input id="archivo-users" type="file" lang="es" class="btn btn-primary btn-fill btn-lg" style="position: absolute;top: 40%;" accept=".json"/>
+                      <input id="subidau" type="submit"class="btn btn-primary btn-fill btn-lg" style="position: absolute;top: 60%;" value="Cargar Usuarios" onclick="CargaUsuarios()">
+                        
+                      </div>
+                    <div class="tab-pane fade" id="publicaciones" role="tabpanel" aria-labelledby="publicaciones-tab" style="width: 50%; padding-left: 400px;">
+                      <<input id="archivo-publi" type="file" lang="es" class="btn btn-primary btn-fill btn-lg" style="position: absolute;top: 40%;" accept=".json"/>>
+                      <input id="subidap" type="submit" class="btn btn-primary btn-fill btn-lg" style="position: absolute;top: 60%;" value="Cargar Publicaciones" onclick="CargaPublicaciones()">
+                    </div>
+                  </div>
             </div>
-          </div>
+        </div>
         </div>
       </div>
-      <script>
-        const x = new Date().getFullYear();
-        let date = document.getElementById('date');
-        date.innerHTML = '&copy; ' + x + date.innerHTML;
-      </script>
     </div>
   </div>
   <!--   Core JS Files   -->
@@ -139,8 +148,88 @@
   <script src="assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
   <!-- Place this tag in your head or just before your close body tag. -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>
-  <!--  Google Maps Plugin    -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+
+  <script>
+    function CargaUsuarios(){
+      let input_archivo = document.getElementById("archivo-users");
+      let archivo = input_archivo.files[0];
+      if (!archivo) {
+        return;
+      }
+      const reader = new FileReader();
+        reader.addEventListener("load", (event) => {
+          let texto = event.target.result;
+          console.log(texto);
+          enviarjsonu(texto);
+        });
+        reader.readAsText(archivo, "UTF-8");
+    }
+
+    function enviarjsonu(textou){
+      var objeto={
+        'users':textou
+      }
+      console.log(objeto)
+      fetch('http://localhost:3000/Usuarios/CargaMasiva', {
+        method: 'POST',
+        body: JSON.stringify(objeto),
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        }
+      })
+        .then(res => res.json())
+        .catch(err => {
+          console.error('Error:', err)
+          alert("Ocurrio un error, ver la consola")
+        })
+        .then(response => {
+          console.log(response);
+          alert(response.Mensaje)
+        })
+    }
+
+    function CargaPublicaciones(){
+      let input_archivo = document.getElementById("archivo-publi");
+      let archivo = input_archivo.files[0];
+      if (!archivo) {
+        return;
+      }
+      const reader = new FileReader();
+        reader.addEventListener("load", (event) => {
+          let texto = event.target.result;
+          console.log(texto);
+          enviarjsonp(texto);
+      });
+
+      reader.readAsText(archivo, "UTF-8");
+    }
+
+    function enviarjsonp(textop){
+      var objeto={
+        'publicaciones':textop
+      }
+      console.log(objeto)
+      fetch('http://localhost:3000/Publicaciones/CargaMasiva', {
+        method: 'POST',
+        body: JSON.stringify(objeto),
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        }
+      })
+        .then(res => res.json())
+        .catch(err => {
+          console.error('Error:', err)
+          alert("Ocurrio un error, ver la consola")
+        })
+        .then(response => {
+          console.log(response);
+          alert(response.Mensaje)
+        })
+    }
+  </script>
+
   <!-- Chartist JS -->
   <script src="assets/js/plugins/chartist.min.js"></script>
   <!--  Notifications Plugin    -->

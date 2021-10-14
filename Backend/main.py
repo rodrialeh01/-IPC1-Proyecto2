@@ -75,6 +75,23 @@ def MostrarUsuarios():
         Datos.append(objeto)
     return(jsonify(Datos))
 
+#METODO PARA VER Y RETORNAR LOS USUARIOS CON SU CONTADOR
+@app.route('/Usuarios/Tabla', methods=['GET'])
+def MostrarUsuariosT():
+    global Usuarios
+    Datos = []
+    for i in range(len(Usuarios)):
+        objeto = {
+            'no': i,
+            'name':Usuarios[i].getNombre(),
+            'gender':Usuarios[i].getGenero(),
+            'username':Usuarios[i].getUser(),
+            'email':Usuarios[i].getCorreo(),
+            'password':Usuarios[i].getContraseña()
+        }
+        Datos.append(objeto)
+    return(jsonify(Datos))
+
 #VERIFICAR LOGIN
 @app.route('/Login',methods=['POST'])
 def VerificarCredenciales():
@@ -144,6 +161,44 @@ def cantidadpassword(passw):
     else:
         return False
 
+#METODO PARA LA CARGA MASIVA DE USUARIOS
+@app.route('/Usuarios/CargaMasiva', methods=['POST'])
+def CargaUsuarios():
+    users = request.json['users']
+    listau = json.loads(users)
+    for usu in listau:
+        name = usu.get('name')
+        gender = usu.get('gender')
+        username = usu.get('username')
+        email = usu.get('email')
+        passw = usu.get('password')
+        if VerificarUsuario(username) == False:
+            nuevo = Usuario(name,gender.upper(),username,email,passw)
+            Usuarios.append(nuevo)
+        else:
+            return(jsonify({'Mensaje':'Este usuario ya existe'}))
+    return(jsonify({'Mensaje':'Se cargo correctamente'}))
+
+#METODO PARA LA CARGA MASIVA DE PUBLICACIONES
+@app.route('/Publicaciones/CargaMasiva', methods=['POST'])
+def CargarPublicaciones():
+    publis = request.json['publicaciones']
+    listap = json.loads(publis)
+    for i in listap:
+        imagenes = i.get('images')
+        for j in imagenes:
+            print("Tipo: Imagen")
+            print("URL: ", j.get('url'))
+            print("Fecha: ", j.get('date'))
+            print("Categoria: ", j.get('category'))
+        videos = i.get('videos')
+        for k in videos:
+            print("Tipo: Video")
+            print("URL: ", k.get('url'))
+            print("Fecha: ", k.get('date'))
+            print("Categoria: ", k.get('category'))
+    return(jsonify({'Mensaje':'Se hizo correctamente la carga'}))
+
 #METODO PARA ELIMINAR UN USUARIO
 @app.route('/Usuarios/Eliminar/<string:user>',methods=['DELETE'])
 def EliminarUsuario(user):
@@ -153,6 +208,13 @@ def EliminarUsuario(user):
             del Usuarios[i]
             return jsonify({'Mensaje':'Se eliminó el usuario exitosamente'})
     return jsonify({'Mensaje':'No se encontró el usuario'})
+
+#METODO PARA RETORNAR LA CANTIDAD DE USUARIOS
+@app.route('/Usuarios/Contador',methods=['GET'])
+def ContadorUsuarios():
+    global Usuarios
+    contador =len(Usuarios) - 1
+    return jsonify({'Cantidad': contador})
 
 #Hace que se levante la api que se esta creando
 if __name__ == "__main__":
