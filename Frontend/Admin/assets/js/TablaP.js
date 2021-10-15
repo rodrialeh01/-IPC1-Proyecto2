@@ -24,7 +24,7 @@ function DatosP(){
             <td> ${element.username} </td>
             <td> ${element.date} </td>
             <td> ${element.category} </td>
-            <td class="text-primary"> ${element.url} </td>
+            <td><div class="card-body text-primary" style="width: 20rem;">${element.url}</div></td>
             <td> <button value=${element.url} type="button" class="btn btn-info btn-sm"><i class="material-icons">visibility</i></button> <button value=${element.url} type="button" class="btn btn-success btn-sm"><i class="material-icons">edit</i></button> <button value=${element.url} type="button" class="btn btn-danger btn-sm"><i class="material-icons">delete</i></button> </td>
             </tr>`        
         });
