@@ -5,6 +5,7 @@ import json
 
 #Llamar a la clase
 from Usuario import Usuario
+from Publicacion import Publicacion
 
 # se crea una variable para poder crear la API
 app = Flask(__name__)
@@ -12,6 +13,9 @@ CORS(app)
 
 #Se crea una lista de usuarios
 Usuarios = []
+
+#Se crea una lista de publicaciones
+Publicaciones = []
 #Se define al usuario Administrador
 Usuarios.append(Usuario("Abner Cardona","M","admin","admin@ipc1.com","admin@ipc1"))
 
@@ -115,35 +119,34 @@ def VerificarUsuarios(us,contra):
     return validar
 
 #MODIFICAR UN USUARIO
-@app.route('/Usuarios/Modificar/<string:user>',methods=['PUT'])
-def ActualizarUsuario(user):
+@app.route('/Usuarios/Modificar/<string:usuario>',methods=['PUT'])
+def ActualizarUsuario(usuario):
     global Usuarios
     nombre = request.json['name']
     genero = request.json['gender']
     correo = request.json['email']
     contraseña = request.json['password']
     for i in range(len(Usuarios)):
-        if str(user) == str(Usuarios[i].getUser()):
-            if cantidadpassword(contraseña) == True:
+        if usuario == Usuarios[i].getUser():
+            if cantidadpassword(request.json['password']) == True:
                 if genero == "M" or genero =="F" or genero=="m" or genero=="f":
                     Usuarios[i].setNombre(nombre)
-                    Usuarios[i].setGenero(genero)
+                    Usuarios[i].setGenero(genero.upper())
                     Usuarios[i].setCorreo(correo)
                     Usuarios[i].setContraseña(contraseña)
                     return jsonify({'Mensaje':'Se actulizó correctamente el usuario'})
                 else:
                     return jsonify({'Mensaje': 'Unicamente puede poner "M", "m", "F" o "f" en el genero'})
             else:
-                return jsonify({'Mensaje': 'Su contraseña debe ser mayor a 8 caracteres'})
-        else:
-            return jsonify({'Mensaje': 'No se encontró el usuario'})
+                return jsonify({'Mensaje':'Su contraseña debe ser mayor a 8 caracteres'})
+    return jsonify({'Mensaje': 'No se encontró el usuario'})
 
 #METODO PARA RETORNAR 1 USUARIO
 @app.route('/Usuarios/<string:user>', methods=['GET'])
 def RetornarUsuario(user):
     global Usuarios
     for Usuario in Usuarios:
-        if Usuario.getUser():
+        if str(Usuario.getUser()) == str(user):
             objeto = {
                 'name': Usuario.getNombre(),
                 'user': Usuario.getUser(),
@@ -187,16 +190,18 @@ def CargarPublicaciones():
     for i in listap:
         imagenes = i.get('images')
         for j in imagenes:
-            print("Tipo: Imagen")
-            print("URL: ", j.get('url'))
-            print("Fecha: ", j.get('date'))
-            print("Categoria: ", j.get('category'))
+            urli = j.get('url')
+            datei = j.get('date')
+            categoryi = j.get('category')
+            nuevoi = Publicacion("Imagen","Admin",urli,datei,categoryi)
+            Publicaciones.append(nuevoi)
         videos = i.get('videos')
         for k in videos:
-            print("Tipo: Video")
-            print("URL: ", k.get('url'))
-            print("Fecha: ", k.get('date'))
-            print("Categoria: ", k.get('category'))
+            urlv = k.get('url')
+            datev = k.get('date')
+            categoryv = k.get('category')
+            nuevov = Publicacion("Video","Admin",urlv,datev,categoryv)
+            Publicaciones.append(nuevov)
     return(jsonify({'Mensaje':'Se hizo correctamente la carga'}))
 
 #METODO PARA ELIMINAR UN USUARIO
@@ -215,6 +220,31 @@ def ContadorUsuarios():
     global Usuarios
     contador =len(Usuarios) - 1
     return jsonify({'Cantidad': contador})
+
+#METODO PARA RETORNAR LA CANTIDAD DE PUBLICACIONES
+@app.route('/Publicaciones/Contador',methods=['GET'])
+def ContadorPublicaciones():
+    global Publicaciones
+    contadorp = len(Publicaciones)
+    return jsonify({'Cantidad': contadorp})
+
+#METODO PARA VER Y RETORNAR LAS PUBLICACIONES CON SU CONTADOR
+@app.route('/Publicaciones/Tabla', methods=['GET'])
+def MostrarPublicacionesT():
+    global Publicaciones
+    Datos = []
+    for i in range(len(Publicaciones)):
+        j = i+1
+        objeto = {
+            'no': j,
+            'tipo':Publicaciones[i].getTipo(),
+            'username': Publicaciones[i].getUsuario(),
+            'date':Publicaciones[i].getFecha(),
+            'category':Publicaciones[i].getCategoria(),
+            'url':Publicaciones[i].getUrl()
+        }
+        Datos.append(objeto)
+    return(jsonify(Datos))
 
 #Hace que se levante la api que se esta creando
 if __name__ == "__main__":
