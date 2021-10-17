@@ -25,7 +25,7 @@ function DatosU(){
             <td> ${element.username} </td>
             <td> ${element.email} </td>
             <td> ${element.gender} </td>
-            <td> ${element.password} </td>
+            <td> ${element.password} </td>            
             <td> <button value=${element.username} onclick="verPerfil(this)" type="button" class="btn btn-info btn-sm"><i class="material-icons">visibility</i></button> <button value=${element.username} onclick="actualizarPerfil(this)" type="button" class="btn btn-success btn-sm"><i class="material-icons">edit</i></button> <button value=${element.username} onclick="eliminarPerfil(this)" type="button" class="btn btn-danger btn-sm"><i class="material-icons">delete</i></button></td>
             </tr>`
           }          
