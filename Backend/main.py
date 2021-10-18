@@ -101,10 +101,14 @@ def MostrarUsuariosT():
 def VerificarCredenciales():
     usuario = request.json['user']
     contraseña = request.json['password']
-    if usuario=="admin" and contraseña =="admin@ipc1":
+    if usuario=="" or contraseña=="":
+        return jsonify({'Mensaje':'Llene todos los campos'})
+    elif usuario=="" and contraseña=="":
+        return jsonify({'Mensaje':'Llene todos los campos'})
+    elif usuario=="admin" and contraseña =="admin@ipc1":
         return jsonify({'Mensaje':'Bienvenido Administrador','Tipo':'Administrador','Login':'true'})
     elif VerificarUsuarios(usuario,contraseña)==True:
-        return jsonify({'Mensaje':'Bienvenido ' + usuario,'Tipo':'Usuario','Login':'true'})
+        return jsonify({'Mensaje':'Bienvenido ' + usuario,'Tipo':'Usuario','Login':'true','user': usuario})
     else:
         return jsonify({'Mensaje':'Credenciales Incorrectas','Tipo':'Error', 'Login':'false'})
 
