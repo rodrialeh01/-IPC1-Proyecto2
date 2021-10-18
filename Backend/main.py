@@ -190,17 +190,19 @@ def CargarPublicaciones():
     for i in listap:
         imagenes = i.get('images')
         for j in imagenes:
+            l= len(Publicaciones) +1
             urli = j.get('url')
             datei = j.get('date')
             categoryi = j.get('category')
-            nuevoi = Publicacion("Imagen","Admin",urli,datei,categoryi)
+            nuevoi = Publicacion(l,"Imagen","Admin",urli,datei,categoryi)
             Publicaciones.append(nuevoi)
         videos = i.get('videos')
         for k in videos:
+            m= len(Publicaciones)+1
             urlv = k.get('url')
             datev = k.get('date')
             categoryv = k.get('category')
-            nuevov = Publicacion("Video","Admin",urlv,datev,categoryv)
+            nuevov = Publicacion(m,"Video","Admin",urlv,datev,categoryv)
             Publicaciones.append(nuevov)
     return(jsonify({'Mensaje':'Se hizo correctamente la carga'}))
 
@@ -234,9 +236,8 @@ def MostrarPublicacionesT():
     global Publicaciones
     Datos = []
     for i in range(len(Publicaciones)):
-        j = i+1
         objeto = {
-            'no': j,
+            'id': Publicaciones[i].getId(),
             'tipo':Publicaciones[i].getTipo(),
             'username': Publicaciones[i].getUsuario(),
             'date':Publicaciones[i].getFecha(),
@@ -245,6 +246,47 @@ def MostrarPublicacionesT():
         }
         Datos.append(objeto)
     return(jsonify(Datos))
+
+#METODO PARA RETORNAR LA PUBLICACIÓN
+@app.route('/Publicaciones/<int:idP>', methods=['GET'])
+def VerPublicacion(idP):
+    global Publicaciones
+    for Publicacion in Publicaciones:
+        if str(idP) == str(Publicacion.getId()):
+            objetoP = {
+                'id':Publicacion.getId(),
+                'url': Publicacion.getUrl(),
+                'tipo': Publicacion.getTipo(),
+                'date': Publicacion.getFecha(),
+                'category': Publicacion.getCategoria()
+            }
+            return jsonify(objetoP)
+    return jsonify({'Mensaje':'No se encontro la publicacion'})
+
+#METODO PARA EDITAR LA PUBLICACIÓN
+@app.route('/Publicaciones/Modificar/<int:idP>', methods=['PUT'])
+def EditarPublicacion(idP):
+    global Publicaciones
+    fechap = request.json['date']
+    categoriap = request.json['category']
+    urlp = request.json['url']
+    for i in range(len(Publicaciones)):
+        if idP == int(Publicaciones[i].getId()):
+            Publicaciones[i].setFecha(fechap)
+            Publicaciones[i].setCategoria(categoriap)
+            Publicaciones[i].setUrl(urlp)
+            return jsonify({'Mensaje':'Se actulizó correctamente la publicación'})
+    return jsonify({'Mensaje': 'No se encontró la publicación'})
+
+#METODO PARA ELIMINAR LA PUBLICACION
+@app.route('/Publicaciones/Eliminar/<int:idP>', methods=['DELETE'])
+def EliminarPublicacion(idP):
+    global Publicaciones
+    for i in range(len(Publicaciones)):
+        if idP == Publicaciones[i].getId():
+            del Publicaciones[i]
+            return jsonify({'Mensaje':'Se eliminó la publicacion exitosamente'})
+    return jsonify({'Mensaje':'No se encontró la publicacion'})
 
 #Hace que se levante la api que se esta creando
 if __name__ == "__main__":

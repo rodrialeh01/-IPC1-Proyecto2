@@ -12,6 +12,10 @@
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 -->
+
+<!--
+  @author Rodrigo Hernández
+-->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -58,13 +62,13 @@
           <p>Carga Masiva</p>
         </a>
       </li>
-      <li class="nav-item active">
+      <li class="nav-item">
         <a class="nav-link" href="TablaUsers.html">
           <i class="material-icons">content_paste</i>
           <p>Lista de Usuarios</p>
         </a>
       </li>
-      <li class="nav-item ">
+      <li class="nav-item active">
         <a class="nav-link" href="TablaPublicaciones.html">
           <i class="material-icons">content_paste</i>
           <p>Lista de Publicaciones</p>
@@ -95,7 +99,7 @@
           <div class="collapse navbar-collapse justify-content-end">
             <ul class="navbar-nav">
               <li class="nav-item">
-                <a class="nav-link" href="TablaUsers.html">
+                <a class="nav-link" href="TablaPublicaciones.html">
                   <i class="material-icons">arrow_back_ios</i>
                   <p class="d-lg-none d-md-block">
                     Regresar
@@ -121,39 +125,41 @@
             <div class="col-md-8">
               <div class="card">
                 <div class="card-header card-header-primary">
-                  <h4 class="card-title">Ver Perfil</h4>
+                  <h4 class="card-title">Ver Publicación</h4>
                 </div>
                 <div class="card-body">
                   <form>
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label for="name" class="bmd-label-floating" ></label>
-                          <input type="text" class="form-control" id = "name" disabled>
+                          <label for="tipo" class="bmd-label-floating" ></label>
+                          <input type="text" class="form-control" id = "tipo" disabled>
                         </div>
                       </div>
                     </div>
                     <div class="row">                      
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label for ="gender" class="bmd-label-floating"></label>
-                          <input type="text" class="form-control" id = "gender" disabled>
+                          <label for ="fecha" class="bmd-label-floating"></label>
+                          <input type="text" class="form-control" id = "fecha" disabled>
                         </div>
                       </div>
                     </div>
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label class="bmd-label-floating" for="email"></label>
-                          <input type="email" class="form-control" id = "email" disabled>
+                          <label class="bmd-label-floating" for="categoria"></label>
+                          <input type="text" class="form-control" id = "categoria" disabled>
                         </div>
                       </div>
                     </div>
-                    <div class="row">                      
-                      <div class="col-md-6">
+                    <div class="row">
+                      <div class="col-md-12">
                         <div class="form-group">
-                          <label class="bmd-label-floating" for = "password"></label>
-                          <input type="text" class="form-control" id = "password" disabled>
+                          <label>URL</label>
+                          <div class="form-group">
+                            <textarea class="form-control" rows="5" id="urlp" disabled></textarea>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -166,12 +172,12 @@
               <div class="card card-profile">
                 <div class="card-avatar">
                   <a href="#pablo">
-                    <img class="img" src="assets/img/faces/marc.jpg" />
+                    <img class="img" src="assets/img/faces/marc2.jpg" />
                   </a>
                 </div>
                 <div class="card-body">
-                  <h6 class="card-category">Usuario</h6>
-                  <h4 class="card-title" id="username">Admin</h4>
+                  <h6 class="card-category">Publicación</h6>
+                  <h4 class="card-title" id="idpubli">0</h4>
                 </div>
               </div>
             </div>
@@ -196,9 +202,9 @@
 
   <script>
     function ObtenerDatos(){ 
-            var usuario = sessionStorage.ver
-            console.log(usuario)          
-            fetch(`http://localhost:3000/Usuarios/${usuario}`, {
+            var publi = sessionStorage.verp
+            console.log(publi)          
+            fetch(`http://localhost:3000//Publicaciones/${publi}`, {
             method: 'GET',
             headers:{
                 'Content-Type': 'application/json',
@@ -210,11 +216,12 @@
             })
             .then(response =>{
                 console.log(response)
-                document.querySelector('#name').value = response.name
-                document.querySelector('#gender').value = response.gender
-                document.querySelector('#email').value = response.password
-                document.querySelector('#password').value = response.email
-                document.getElementById('username').innerHTML = usuario
+                document.querySelector('#tipo').value = response.tipo
+                document.querySelector('#fecha').value = response.date
+                document.querySelector('#categoria').value = response.category
+                //document.querySelector('#urlp').value = response.url
+                document.getElementById('urlp').innerHTML = response.url
+                document.getElementById('idpubli').innerHTML = publi
             })
         }
     ObtenerDatos();

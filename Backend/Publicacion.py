@@ -1,6 +1,7 @@
 class Publicacion:
     #CONSTRUCTOR
-    def __init__(self, tipo, usuario, url, fecha, categoria):
+    def __init__(self,id, tipo, usuario, url, fecha, categoria):
+        self.id = id
         self.tipo = tipo
         self.usuario = usuario
         self.url = url
@@ -8,6 +9,12 @@ class Publicacion:
         self.categoria = categoria
 
     #ENCAPSULAMIENTO
+    def getId(self):
+        return self.id
+
+    def setId(self, id):
+        self.id = id
+
     def getTipo(self):
         return self.tipo
 
