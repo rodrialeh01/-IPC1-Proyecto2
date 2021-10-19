@@ -292,6 +292,22 @@ def EliminarPublicacion(idP):
             return jsonify({'Mensaje':'Se eliminó la publicacion exitosamente'})
     return jsonify({'Mensaje':'No se encontró la publicacion'})
 
+#METODO PARA RETORNAR LAS PUBLICACIONES Y MOSTRARLAS EN EL BACKEND DE INICIO
+@app.route('/Publicaciones/Inicio', methods=['GET'])
+def PublicacionesInicio():
+    global Publicaciones
+    Datos = []
+    for i in range(len(Publicaciones)):
+        objeto = {
+            'type': Publicaciones[i].getTipo(),
+            'username': Publicaciones[i].getUsuario(),
+            'date': Publicaciones[i].getFecha(),
+            'category': Publicaciones[i].getCategoria(),
+            'url': Publicaciones[i].getUrl()
+        }
+        Datos.append(objeto)
+    return(jsonify(Datos))
+
 #Hace que se levante la api que se esta creando
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=3000, debug=True)
