@@ -54,8 +54,12 @@ Coded by www.creative-tim.com
                   <div class="mb-3">
                     <input type="text" class="form-control form-control-lg" placeholder="Nombre" aria-label="Nombre" aria-describedby="email-addon" id="nombre" required>
                   </div>
-                  <div class="mb-3">
-                    <input type="text" class="form-control form-control-lg" placeholder="Género (M/F)" aria-label="Género (M/F)" aria-describedby="email-addon" id="genero" required>
+                  <h6>Género</h6>
+                  <div class="dropdown">
+                    <select name="Tipo" id="gender" class="btn bg-gradient-primary dropdown-toggle">
+                      <option class="dropdown-item" value="M">M</option>
+                      <option class="dropdown-item" value="F">F</option>
+                    </select>
                   </div>
                   <div class="mb-3">
                     <input type="text" class="form-control form-control-lg" placeholder="Nombre de usuario" aria-label="Nombre de usuario" aria-describedby="email-addon" id="usuario" required>
@@ -101,10 +105,11 @@ Coded by www.creative-tim.com
   //FUNCION PARA REGISTRARSE
     function RegistrarUsuario(){
       var nombre = document.querySelector('#nombre').value
-      var genero = document.querySelector('#genero').value
       var user = document.querySelector('#usuario').value 
       var correo = document.querySelector('#correo').value
       var password = document.querySelector('#contraseña').value
+      var combo = document.getElementById("gender");
+      var genero = combo.options[combo.selectedIndex].text;
 
       var objeto={
         'name':nombre,

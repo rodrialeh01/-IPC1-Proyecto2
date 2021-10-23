@@ -133,11 +133,14 @@
                         </div>
                       </div>
                     </div>
-                    <div class="row">                      
+                    <div class="row">
                       <div class="col-md-6">
-                        <div class="form-group">
-                          <label for ="gender" class="bmd-label-floating"></label>
-                          <input type="text" class="form-control" id = "gender" disabled>
+                        <p>Género</p>
+                        <div class="dropdown">
+                          <select name="Tipo" id="gender" class="btn btn-primary dropdown-toggle" disabled>
+                            <option class="dropdown-item" value="M">M</option>
+                            <option class="dropdown-item" value="F">F</option>
+                          </select>
                         </div>
                       </div>
                     </div>
@@ -211,7 +214,7 @@
             .then(response =>{
                 console.log(response)
                 document.querySelector('#name').value = response.name
-                document.querySelector('#gender').value = response.gender
+                document.getElementById("gender").value = response.gender
                 document.querySelector('#email').value = response.password
                 document.querySelector('#password').value = response.email
                 document.getElementById('username').innerHTML = usuario

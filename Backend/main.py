@@ -3,9 +3,10 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import json
 
-#Llamar a la clase
+#Llamar a las clases
 from Usuario import Usuario
 from Publicacion import Publicacion
+from Propio import Propio
 
 # se crea una variable para poder crear la API
 app = Flask(__name__)
@@ -16,6 +17,12 @@ Usuarios = []
 
 #Se crea una lista de publicaciones
 Publicaciones = []
+
+#Se crea una lista de Publicaciones para asignarlas a Propios
+PubUser = []
+
+#Se crea una lista de Propio para asignar las publicaciones
+Propios = []
 #Se define al usuario Administrador
 Usuarios.append(Usuario("Abner Cardona","M","admin","admin@ipc1.com","admin@ipc1"))
 
@@ -34,15 +41,11 @@ def RegistrarUsuario():
         user = request.json['username']
         email = request.json['email']
         contraseña = request.json['password']
-
         if VerificarUsuario(user) == False:
             if cantidadpassword(contraseña) == True:
-                if genero == "M" or genero =="F" or genero=="m" or genero=="f":
                     nuevo = Usuario(nombre,genero.upper(),user,email,contraseña)
                     Usuarios.append(nuevo)
                     return jsonify({'Mensaje': 'Se agregó el usuario correctamente'})
-                else:
-                    return jsonify({'Mensaje': 'Unicamente puede poner "M", "m", "F" o "f" en el genero'})
             else:
                 return jsonify({'Mensaje': 'Su contraseña debe ser mayor a 8 caracteres'})               
         else:
@@ -126,6 +129,7 @@ def VerificarUsuarios(us,contra):
 @app.route('/Usuarios/Modificar/<string:usuario>',methods=['PUT'])
 def ActualizarUsuario(usuario):
     global Usuarios
+    nusuario = request.json['username']
     nombre = request.json['name']
     genero = request.json['gender']
     correo = request.json['email']
@@ -134,6 +138,7 @@ def ActualizarUsuario(usuario):
         if usuario == Usuarios[i].getUser():
             if cantidadpassword(request.json['password']) == True:
                 if genero == "M" or genero =="F" or genero=="m" or genero=="f":
+                    Usuarios[i].setUser(nusuario)
                     Usuarios[i].setNombre(nombre)
                     Usuarios[i].setGenero(genero.upper())
                     Usuarios[i].setCorreo(correo)
@@ -189,6 +194,9 @@ def CargaUsuarios():
 #METODO PARA LA CARGA MASIVA DE PUBLICACIONES
 @app.route('/Publicaciones/CargaMasiva', methods=['POST'])
 def CargarPublicaciones():
+    global Publicaciones
+    global Propios
+    DPub = []
     publis = request.json['publicaciones']
     listap = json.loads(publis)
     for i in listap:
@@ -200,6 +208,8 @@ def CargarPublicaciones():
             categoryi = j.get('category')
             nuevoi = Publicacion(l,"Imagen","Admin",urli,datei,categoryi)
             Publicaciones.append(nuevoi)
+            DPub.append(nuevoi)
+            Propios.append(Propio("Admin",DPub))
         videos = i.get('videos')
         for k in videos:
             m= len(Publicaciones)+1
@@ -208,6 +218,8 @@ def CargarPublicaciones():
             categoryv = k.get('category')
             nuevov = Publicacion(m,"Video","Admin",urlv,datev,categoryv)
             Publicaciones.append(nuevov)
+            DPub.append(nuevov)
+            Propios.append(Propio("Admin",DPub))
     return(jsonify({'Mensaje':'Se hizo correctamente la carga'}))
 
 #METODO PARA ELIMINAR UN USUARIO
@@ -307,6 +319,55 @@ def PublicacionesInicio():
         }
         Datos.append(objeto)
     return(jsonify(Datos))
+
+#PUBLICAR UN POST
+@app.route('/Publicaciones/Nuevo', methods=['POST'])
+def NuevoPost():
+    global Publicaciones
+    global Propios
+    global PubUser
+    username = request.json['username']
+    type = request.json['type']
+    date = request.json['date']
+    category = request.json['category']
+    url = request.json['url']
+    if username != "" and type != "" and date != "" and category != "" and url != "":
+        nuevo = Publicacion((ultimap()+1),type,username,url,date,category)
+        Publicaciones.append(nuevo)
+        PubUser.append(nuevo)
+        Propios.append(Propio(username,PubUser))
+        return jsonify({'Mensaje':'Publicación hecha con éxito'})
+    return jsonify({'Mensaje': 'No se pudo realizar el POST'})
+
+#OBTENER EL ULTIMO ID DE LAS LISTA DE PUBLICACIONES 
+def ultimap():
+    global Publicaciones
+    return(Publicaciones[len(Publicaciones)-1].getId())
+
+#OBTENER LAS PUBLICACIONES DE CADA USUARIO
+@app.route('/Publicaciones/<string:user>', methods=['GET'])
+def PublicacionesUsuario(user):
+    global Publicaciones
+    global Propios
+    for Propio in Propios:
+        if(Propio.getUsuario()==user):
+            Publis = []
+            for pub in Propio.getPublicacion():
+                if(pub.getUsuario() == user):
+                    objeto = {
+                        'type': pub.getTipo(),
+                        'username': pub.getUsuario(),
+                        'date': pub.getFecha(),
+                        'category': pub.getCategoria(),
+                        'url':pub.getUrl()
+                    }
+                    Publis.append(objeto)
+            objeto = {
+                'username': Propio.getUsuario(),
+                'publicacion': Publis
+            }
+    return(jsonify(objeto))
+
 
 #Hace que se levante la api que se esta creando
 if __name__ == "__main__":
