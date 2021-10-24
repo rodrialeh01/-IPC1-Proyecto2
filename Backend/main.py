@@ -59,8 +59,8 @@ def VerificarUsuario(nusuario):
     if len(Usuarios)==0:
         return False        
     else:
-        for i in range(len(Usuarios)):
-            if str(nusuario) == str(Usuarios[i].getUser()):
+        for Usuario in Usuarios:
+            if str(nusuario) == str(Usuario.getUser()):
                 validar =True
             else:
                 validar =False
@@ -100,26 +100,23 @@ def MostrarUsuariosT():
     return(jsonify(Datos))
 
 #VERIFICAR LOGIN
-@app.route('/Login',methods=['POST'])
-def VerificarCredenciales():
-    usuario = request.json['user']
-    contraseña = request.json['password']
-    if usuario=="" or contraseña=="":
-        return jsonify({'Mensaje':'Llene todos los campos'})
-    elif usuario=="" and contraseña=="":
-        return jsonify({'Mensaje':'Llene todos los campos'})
-    elif usuario=="admin" and contraseña =="admin@ipc1":
-        return jsonify({'Mensaje':'Bienvenido Administrador','Tipo':'Administrador','Login':'true'})
-    elif VerificarUsuarios(usuario,contraseña)==True:
-        return jsonify({'Mensaje':'Bienvenido ' + usuario,'Tipo':'Usuario','Login':'true','user': usuario})
-    else:
-        return jsonify({'Mensaje':'Credenciales Incorrectas','Tipo':'Error', 'Login':'false'})
+@app.route('/Login/<string:username>/<string:password>',methods=['GET'])
+def VerificarCredenciales(username,password):
+    global Usuarios
+    for Usuario in Usuarios:
+        if (username=="admin" and password =="admin@ipc1"):
+            return jsonify({'Mensaje':'Bienvenido Administrador','Tipo':'Administrador','Login':'true'})
+        elif str(Usuario.getUser()) == str(username) and str(Usuario.getContraseña()) == str(password):
+            return jsonify({'Mensaje':'Bienvenido ' + username,'Tipo':'Usuario','Login':'true','user': username})
+        else:
+            return jsonify({'Mensaje':'Credenciales Incorrectas','Tipo':'Error Effesinda', 'Login':'false'})
+
 
 #METODO PARA VERIFICAR SI EL USUARIO EXISTE
 def VerificarUsuarios(us,contra):
     global Usuarios
-    for i in range(len(Usuarios)):
-        if us==Usuarios[i].getUser() and contra==Usuarios[i].getContraseña():
+    for Usuario in Usuarios:
+        if ((str(Usuario.getUser()) == str(us)) and (str(contra)==str(Usuario.getContraseña()))):
             validar = True
         else:
             validar = False
@@ -137,15 +134,12 @@ def ActualizarUsuario(usuario):
     for i in range(len(Usuarios)):
         if usuario == Usuarios[i].getUser():
             if cantidadpassword(request.json['password']) == True:
-                if genero == "M" or genero =="F" or genero=="m" or genero=="f":
-                    Usuarios[i].setUser(nusuario)
-                    Usuarios[i].setNombre(nombre)
-                    Usuarios[i].setGenero(genero.upper())
-                    Usuarios[i].setCorreo(correo)
-                    Usuarios[i].setContraseña(contraseña)
-                    return jsonify({'Mensaje':'Se actulizó correctamente el usuario'})
-                else:
-                    return jsonify({'Mensaje': 'Unicamente puede poner "M", "m", "F" o "f" en el genero'})
+                Usuarios[i].setUser(nusuario)
+                Usuarios[i].setNombre(nombre)
+                Usuarios[i].setGenero(genero.upper())
+                Usuarios[i].setCorreo(correo)
+                Usuarios[i].setContraseña(contraseña)
+                return jsonify({'Mensaje':'Se actulizó correctamente el usuario'})
             else:
                 return jsonify({'Mensaje':'Su contraseña debe ser mayor a 8 caracteres'})
     return jsonify({'Mensaje': 'No se encontró el usuario'})
@@ -206,20 +200,22 @@ def CargarPublicaciones():
             urli = j.get('url')
             datei = j.get('date')
             categoryi = j.get('category')
-            nuevoi = Publicacion(l,"Imagen","Admin",urli,datei,categoryi)
+            authori = j.get('author')
+            nuevoi = Publicacion(l,"Imagen",authori,urli,datei,categoryi)
             Publicaciones.append(nuevoi)
             DPub.append(nuevoi)
-            Propios.append(Propio("Admin",DPub))
+            Propios.append(Propio(authori,DPub))
         videos = i.get('videos')
         for k in videos:
             m= len(Publicaciones)+1
             urlv = k.get('url')
             datev = k.get('date')
             categoryv = k.get('category')
-            nuevov = Publicacion(m,"Video","Admin",urlv,datev,categoryv)
+            authorv = k.get('author')
+            nuevov = Publicacion(m,"Video",authorv,urlv,datev,categoryv)
             Publicaciones.append(nuevov)
             DPub.append(nuevov)
-            Propios.append(Propio("Admin",DPub))
+            Propios.append(Propio(authorv,DPub))
     return(jsonify({'Mensaje':'Se hizo correctamente la carga'}))
 
 #METODO PARA ELIMINAR UN USUARIO
@@ -367,7 +363,6 @@ def PublicacionesUsuario(user):
                 'publicacion': Publis
             }
     return(jsonify(objeto))
-
 
 #Hace que se levante la api que se esta creando
 if __name__ == "__main__":
