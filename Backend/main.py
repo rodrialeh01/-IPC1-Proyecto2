@@ -201,7 +201,7 @@ def CargarPublicaciones():
     global Publicaciones
     global Propios
     global CPubsUser
-    DPub = []
+    global PubUser
     publis = request.json['publicaciones']
     listap = json.loads(publis)
     for i in listap:
@@ -214,9 +214,9 @@ def CargarPublicaciones():
             authori = j.get('author')
             nuevoi = Publicacion(l,"Imagen",authori,urli,datei,categoryi)
             Publicaciones.append(nuevoi)
+            PubUser.append(nuevoi)
             AsignarCantidadP(nuevoi.getUsuario())
-            DPub.append(nuevoi)
-            Propios.append(Propio(authori,DPub))
+            Propios.append(Propio(authori,PubUser))
         videos = i.get('videos')
         for k in videos:
             m= len(Publicaciones)+1
@@ -227,8 +227,8 @@ def CargarPublicaciones():
             nuevov = Publicacion(m,"Video",authorv,urlv,datev,categoryv)
             Publicaciones.append(nuevov)
             AsignarCantidadP(nuevov.getUsuario())
-            DPub.append(nuevov)
-            Propios.append(Propio(authorv,DPub))
+            PubUser.append(nuevov)
+            Propios.append(Propio(authorv,PubUser))
     return(jsonify({'Mensaje':'Se hizo correctamente la carga'}))
 
 #ASIGNA LA CANTIDAD DE PUBLICACIONES POR CADA USUARIO
@@ -238,6 +238,7 @@ def AsignarCantidadP(pubu):
         if (str(pubu) == str(pu.getUsuario())):
             aumento = int(pu.getCantidad()) +1
             pu.setCantidad(int(aumento))
+            break
 
 #METODO PARA ELIMINAR UN USUARIO
 @app.route('/Usuarios/Eliminar/<string:user>',methods=['DELETE'])
@@ -353,7 +354,7 @@ def NuevoPost():
         nuevo = Publicacion((ultimap()+1),type,username,url,date,category)
         Publicaciones.append(nuevo)
         PubUser.append(nuevo)
-        AsignarCantidadP(nuevo.getUsuario())
+        AsignarCantidadP(username)
         Propios.append(Propio(username,PubUser))
         return jsonify({'Mensaje':'Publicación hecha con éxito'})
     return jsonify({'Mensaje': 'No se pudo realizar el POST'})
@@ -368,7 +369,6 @@ def ultimap():
 def PublicacionesUsuario(user):
     global Publicaciones
     global Propios
-    global CPubsUser
     for Propio in Propios:
         if(Propio.getUsuario()==user):
             Publis = []
@@ -384,10 +384,8 @@ def PublicacionesUsuario(user):
                     Publis.append(objeto)
             objeto = {
                 'username': Propio.getUsuario(),
-                'publicacion': Publis,
-                'cantidad': len(Publis)
+                'publicacion': Publis
             }
-            CPubsUser.append(Publicaciones_Usuario(Propio.getUsuario(), len(Publis)))
     return(jsonify(objeto))
 
 #RETORNA LA CANTIDAD DE PUBLICACIONES POR CADA USUARIO

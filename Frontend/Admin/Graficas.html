@@ -32,6 +32,8 @@
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="assets/demo/demo.css" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.js"></script>
+  <script src="assets/js/html2pdf.bundle.min.js"></script>
+  <script src="assets/js/script.js"></script>
 </head>
 
 <body class="dark-edition">
@@ -129,7 +131,7 @@
                 </div>
               </div>
               <br>
-              <div class="card card-nav-tabs text-center">
+              <div id="g2" class="card card-nav-tabs text-center">
                 <div class="card-header card-header-info">
                   <h3>Top 5 de usuarios con mas posts</h3>
                 </div>
@@ -138,7 +140,9 @@
                   <canvas id="grafica2" width="100" height="100"></canvas>
                 </div>
                 <div class="card-footer text-muted">
-                    <button type="button" class="btn btn-success">Exportar PDF</button>
+                    <form>
+                        <button id="rpt2" type="button" class="btn btn-success">Exportar PDF</button>
+                    </form>
                 </div>
               </div>
           </div>
