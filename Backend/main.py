@@ -1,4 +1,5 @@
 #Se importan las librerias correspondientes
+from typing import List
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import json
@@ -7,6 +8,7 @@ import json
 from Usuario import Usuario
 from Publicacion import Publicacion
 from Propio import Propio
+from Publicaciones_Usuario import Publicaciones_Usuario
 
 # se crea una variable para poder crear la API
 app = Flask(__name__)
@@ -23,6 +25,10 @@ PubUser = []
 
 #Se crea una lista de Propio para asignar las publicaciones
 Propios = []
+
+#Se crea una lista de cantidad de publicaciones por usuario
+CPubsUser = []
+
 #Se define al usuario Administrador
 Usuarios.append(Usuario("Abner Cardona","M","admin","admin@ipc1.com","admin@ipc1"))
 
@@ -35,6 +41,7 @@ def Inicio():
 @app.route('/Usuarios/Registrar', methods=['POST'])
 def RegistrarUsuario():
     global Usuarios
+    global CPubsUser
     try:
         nombre = request.json['name']
         genero = request.json['gender']
@@ -45,6 +52,7 @@ def RegistrarUsuario():
             if cantidadpassword(contraseña) == True:
                     nuevo = Usuario(nombre,genero.upper(),user,email,contraseña)
                     Usuarios.append(nuevo)
+                    CPubsUser.append(Publicaciones_Usuario(nuevo.getUser(),0))
                     return jsonify({'Mensaje': 'Se agregó el usuario correctamente'})
             else:
                 return jsonify({'Mensaje': 'Su contraseña debe ser mayor a 8 caracteres'})               
@@ -106,20 +114,19 @@ def VerificarCredenciales(username,password):
     for Usuario in Usuarios:
         if (username=="admin" and password =="admin@ipc1"):
             return jsonify({'Mensaje':'Bienvenido Administrador','Tipo':'Administrador','Login':'true'})
-        elif str(Usuario.getUser()) == str(username) and str(Usuario.getContraseña()) == str(password):
+        elif VerificarUsuarios(username,password) == True:
             return jsonify({'Mensaje':'Bienvenido ' + username,'Tipo':'Usuario','Login':'true','user': username})
-        else:
-            return jsonify({'Mensaje':'Credenciales Incorrectas','Tipo':'Error Effesinda', 'Login':'false'})
+    return jsonify({'Mensaje':'Credenciales Incorrectas','Tipo':'Error Effesinda', 'Login':'false'})
 
 
 #METODO PARA VERIFICAR SI EL USUARIO EXISTE
 def VerificarUsuarios(us,contra):
     global Usuarios
+    validar=False
     for Usuario in Usuarios:
-        if ((str(Usuario.getUser()) == str(us)) and (str(contra)==str(Usuario.getContraseña()))):
-            validar = True
-        else:
-            validar = False
+        if (str(Usuario.getUser()) == str(us)):
+            if (str(contra)==str(Usuario.getContraseña())):
+                validar = True
     return validar
 
 #MODIFICAR UN USUARIO
@@ -170,6 +177,8 @@ def cantidadpassword(passw):
 #METODO PARA LA CARGA MASIVA DE USUARIOS
 @app.route('/Usuarios/CargaMasiva', methods=['POST'])
 def CargaUsuarios():
+    global Usuarios
+    global CPubsUser
     users = request.json['users']
     listau = json.loads(users)
     for usu in listau:
@@ -181,6 +190,7 @@ def CargaUsuarios():
         if VerificarUsuario(username) == False:
             nuevo = Usuario(name,gender.upper(),username,email,passw)
             Usuarios.append(nuevo)
+            CPubsUser.append(Publicaciones_Usuario(nuevo.getUser(),0))
         else:
             return(jsonify({'Mensaje':'Este usuario ya existe'}))
     return(jsonify({'Mensaje':'Se cargo correctamente'}))
@@ -190,6 +200,7 @@ def CargaUsuarios():
 def CargarPublicaciones():
     global Publicaciones
     global Propios
+    global CPubsUser
     DPub = []
     publis = request.json['publicaciones']
     listap = json.loads(publis)
@@ -203,6 +214,7 @@ def CargarPublicaciones():
             authori = j.get('author')
             nuevoi = Publicacion(l,"Imagen",authori,urli,datei,categoryi)
             Publicaciones.append(nuevoi)
+            AsignarCantidadP(nuevoi.getUsuario())
             DPub.append(nuevoi)
             Propios.append(Propio(authori,DPub))
         videos = i.get('videos')
@@ -214,9 +226,18 @@ def CargarPublicaciones():
             authorv = k.get('author')
             nuevov = Publicacion(m,"Video",authorv,urlv,datev,categoryv)
             Publicaciones.append(nuevov)
+            AsignarCantidadP(nuevov.getUsuario())
             DPub.append(nuevov)
             Propios.append(Propio(authorv,DPub))
     return(jsonify({'Mensaje':'Se hizo correctamente la carga'}))
+
+#ASIGNA LA CANTIDAD DE PUBLICACIONES POR CADA USUARIO
+def AsignarCantidadP(pubu):
+    global CPubsUser
+    for pu in CPubsUser:
+        if (str(pubu) == str(pu.getUsuario())):
+            aumento = int(pu.getCantidad()) +1
+            pu.setCantidad(int(aumento))
 
 #METODO PARA ELIMINAR UN USUARIO
 @app.route('/Usuarios/Eliminar/<string:user>',methods=['DELETE'])
@@ -322,6 +343,7 @@ def NuevoPost():
     global Publicaciones
     global Propios
     global PubUser
+    global CPubsUser
     username = request.json['username']
     type = request.json['type']
     date = request.json['date']
@@ -331,6 +353,7 @@ def NuevoPost():
         nuevo = Publicacion((ultimap()+1),type,username,url,date,category)
         Publicaciones.append(nuevo)
         PubUser.append(nuevo)
+        AsignarCantidadP(nuevo.getUsuario())
         Propios.append(Propio(username,PubUser))
         return jsonify({'Mensaje':'Publicación hecha con éxito'})
     return jsonify({'Mensaje': 'No se pudo realizar el POST'})
@@ -345,6 +368,7 @@ def ultimap():
 def PublicacionesUsuario(user):
     global Publicaciones
     global Propios
+    global CPubsUser
     for Propio in Propios:
         if(Propio.getUsuario()==user):
             Publis = []
@@ -360,10 +384,41 @@ def PublicacionesUsuario(user):
                     Publis.append(objeto)
             objeto = {
                 'username': Propio.getUsuario(),
-                'publicacion': Publis
+                'publicacion': Publis,
+                'cantidad': len(Publis)
             }
+            CPubsUser.append(Publicaciones_Usuario(Propio.getUsuario(), len(Publis)))
     return(jsonify(objeto))
+
+#RETORNA LA CANTIDAD DE PUBLICACIONES POR CADA USUARIO
+@app.route('/Publicaciones/Usuarios', methods=['GET'])
+def ObtenerPUsers():
+    global CPubsUser
+    Datos = []
+    OrdenamientoCPublicaciones(CPubsUser)
+    for i in range(0,5):
+        objeto = {
+            'username': CPubsUser[i].getUsuario(),
+            'cantidad': CPubsUser[i].getCantidad()
+        }
+        Datos.append(objeto)
+    return(jsonify(Datos))
+
+#ORDENAMIENTO DE CANTIDAD DE PUBLICACIONES
+def OrdenamientoCPublicaciones(arreglo):
+    try:
+        for i in range(1,len(arreglo)):
+            clave = arreglo[i]
+            j = i-1
+            while (j>=0 and arreglo[j].getCantidad() < clave.getCantidad()):
+                arreglo[j+1] = arreglo[j]
+                j = j-1
+            arreglo[j+1] = clave
+        return(arreglo)
+    except:
+        print('F')
 
 #Hace que se levante la api que se esta creando
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=3000, debug=True)
+    ObtenerPUsers()
