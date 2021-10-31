@@ -361,9 +361,13 @@
       var form = document.getElementById("hola")
       form.addEventListener("submit",function(event){
           event.preventDefault()
-          var doc = new jsPDF()
+          var doc = new jsPDF('l')
           doc.autoTable({
               html:'#tablau',
+              rowPageBreak: 'auto',
+              styles: { overflow: 'ellipsize', cellWidth: 'wrap' },
+              columnStyles: { text: { cellWidth: 'auto' } },
+              horizontalPageBreak: true,
               theme:'grid'
           })
           doc.save('Usuarios.pdf')

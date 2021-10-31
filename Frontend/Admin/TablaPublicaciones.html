@@ -358,10 +358,13 @@
       var form = document.getElementById("hola")
       form.addEventListener("submit",function(event){
           event.preventDefault()
-          var doc = new jsPDF()
+          var doc = new jsPDF('l')
           doc.autoTable({
-              html:'#tablap',
-              theme:'striped'
+              html:'#tablap',              
+              rowPageBreak: 'auto',
+              styles: { overflow: 'ellipsize', cellWidth: 'wrap' },
+              columnStyles: { text: { cellWidth: 'auto' } },
+              horizontalPageBreak: true,
           })
           doc.save('Publicaciones.pdf')
       })
