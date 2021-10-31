@@ -335,9 +335,31 @@ def EliminarPublicacion(idP):
     global Publicaciones
     for i in range(len(Publicaciones)):
         if idP == Publicaciones[i].getId():
-            del Publicaciones[i]
+            descontarPubs(Publicaciones[i].getUsuario())
+            eliminarpubuser(Publicaciones[i].getId(), Publicaciones[i].getUsuario())
+            del Publicaciones[i]            
             return jsonify({'Mensaje':'Se eliminó la publicacion exitosamente'})
     return jsonify({'Mensaje':'No se encontró la publicacion'})
+
+#Se descuenta la publicacion eliminada por el administrador
+def descontarPubs(user):
+    global CPubsUser
+    for pu in CPubsUser:
+        if (str(user) == str(pu.getUsuario())):
+            descuento = int(pu.getCantidad()) -1
+            pu.setCantidad(int(descuento))
+
+#Eliminar la publicacion asignada al usuario
+def eliminarpubuser(idp, user):
+    global PubUser
+    global Propios
+    Datos = []
+    for i in PubUser:
+        if(int(idp) == int(i.getId())):
+            PubUser.remove(i)
+    for p in Propios:
+        if(p.getUsuario() == user):
+            p.setPublicacion(PubUser)
 
 #METODO PARA RETORNAR LAS PUBLICACIONES Y MOSTRARLAS EN EL BACKEND DE INICIO
 @app.route('/Publicaciones/Inicio', methods=['GET'])
@@ -346,6 +368,7 @@ def PublicacionesInicio():
     Datos = []
     for i in range(len(Publicaciones)):
         objeto = {
+            'id': Publicaciones[i].getId(),
             'type': Publicaciones[i].getTipo(),
             'username': Publicaciones[i].getUsuario(),
             'date': Publicaciones[i].getFecha(),
@@ -392,6 +415,7 @@ def PublicacionesUsuario(user):
             for pub in Propio.getPublicacion():
                 if(pub.getUsuario() == user):
                     objeto = {
+                        'id': pub.getId(),
                         'type': pub.getTipo(),
                         'username': pub.getUsuario(),
                         'date': pub.getFecha(),
@@ -411,12 +435,31 @@ def ObtenerPUsers():
     global CPubsUser
     Datos = []
     OrdenamientoCPublicaciones(CPubsUser)
-    for i in range(0,5):
-        objeto = {
-            'username': CPubsUser[i].getUsuario(),
-            'cantidad': CPubsUser[i].getCantidad()
-        }
-        Datos.append(objeto)
+    objeto0 = {
+        'username': CPubsUser[0].getUsuario(),
+        'cantidad': CPubsUser[0].getCantidad()
+    }
+    Datos.append(objeto0)
+    objeto1 = {
+        'username': CPubsUser[1].getUsuario(),
+        'cantidad': CPubsUser[1].getCantidad()
+    }
+    Datos.append(objeto1)
+    objeto2 = {
+        'username': CPubsUser[2].getUsuario(),
+        'cantidad': CPubsUser[2].getCantidad()
+    }
+    Datos.append(objeto2)
+    objeto3 = {
+        'username': CPubsUser[3].getUsuario(),
+        'cantidad': CPubsUser[3].getCantidad()
+    }
+    Datos.append(objeto3)
+    objeto4 = {
+        'username': CPubsUser[4].getUsuario(),
+        'cantidad': CPubsUser[4].getCantidad()
+    }
+    Datos.append(objeto4)
     return(jsonify(Datos))
 
 #ORDENAMIENTO DE CANTIDAD DE PUBLICACIONES
@@ -436,4 +479,3 @@ def OrdenamientoCPublicaciones(arreglo):
 #Hace que se levante la api que se esta creando
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=3000, debug=True)
-    ObtenerPUsers()
