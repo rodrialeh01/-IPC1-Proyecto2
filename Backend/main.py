@@ -49,30 +49,45 @@ def RegistrarUsuario():
         email = request.json['email']
         contraseña = request.json['password']
         if VerificarUsuario(user) == False:
-            if cantidadpassword(contraseña) == True:
+            if VerificarPassword(contraseña) == True:
                     nuevo = Usuario(nombre,genero.upper(),user,email,contraseña)
                     Usuarios.append(nuevo)
                     CPubsUser.append(Publicaciones_Usuario(nuevo.getUser(),0))
-                    return jsonify({'Mensaje': 'Se agregó el usuario correctamente'})
+                    return jsonify({'Mensaje': 'Se agregó el usuario correctamente','estado':'true'})
             else:
-                return jsonify({'Mensaje': 'Su contraseña debe ser mayor a 8 caracteres'})               
+                return jsonify({'Mensaje': 'Su contraseña debe ser mayor a 8 caracteres, contener un número y un símbolo','estado':'false'})               
         else:
-            return jsonify({'Mensaje': 'Ingrese un usuario existente'})
+            return jsonify({'Mensaje': 'Ingrese un usuario existente','estado':'false'})
     except:
-        return jsonify({'Mensaje': 'No se pudo registrar al usuario'})
+        return jsonify({'Mensaje': 'No se pudo registrar al usuario','estado':'false'})
+
+#VERIFICAR SI LA CONTRASEÑA ES VALIDA
+def VerificarPassword(passwd):
+    SpecialSym =['$', '@', '#', '%','!','&','(',')','*','+',',','-','_','.','/',':',';','<','=','>','?','[',']','^','{','}','|']
+    val = True
+    if len(passwd) < 8:
+        print('Ingresa una contraseña mayor a 8 caracteres')
+        val = False
+        
+    if not any(char.isdigit() for char in passwd):
+        print('La contraseña debe de tener almenos un numero')
+        val = False
+        
+    if not any(char in SpecialSym for char in passwd):
+        print('La contraseña debe de contener almenos un simbolo')
+        val = False
+
+    if val:
+        return val
 
 #METODO PARA VERIFICAR SI EL USUARIO EXISTE
 def VerificarUsuario(nusuario):
     global Usuarios
-    if len(Usuarios)==0:
-        return False        
-    else:
-        for Usuario in Usuarios:
-            if str(nusuario) == str(Usuario.getUser()):
-                validar =True
-            else:
-                validar =False
-        return validar
+    validar = False
+    for Usuario in Usuarios:
+        if str(nusuario) == str(Usuario.getUser()):
+            validar =True
+    return validar
 
 #METODO PARA VER LOS USUARIOS
 @app.route('/Usuarios', methods=['GET'])
@@ -108,9 +123,11 @@ def MostrarUsuariosT():
     return(jsonify(Datos))
 
 #VERIFICAR LOGIN
-@app.route('/Login/<string:username>/<string:password>',methods=['GET'])
-def VerificarCredenciales(username,password):
+@app.route('/Login',methods=['POST'])
+def VerificarCredenciales():
     global Usuarios
+    username = request.json['username']
+    password = request.json['password']
     for Usuario in Usuarios:
         if (username=="admin" and password =="admin@ipc1"):
             return jsonify({'Mensaje':'Bienvenido Administrador','Tipo':'Administrador','Login':'true'})

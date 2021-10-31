@@ -71,6 +71,9 @@ Coded by www.creative-tim.com
                     <input type="text" class="form-control form-control-lg" placeholder="Contraseña" aria-label="Contraseña" aria-describedby="password-addon" id="contraseña" required>
                   </div>
                   <div class="text-center">
+                    <p id="merror" class="font-warning"></p>
+                  </div>
+                  <div class="text-center">
                     <button onclick="RegistrarUsuario()" type="button" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0" id="register">Registrarse</button>
                   </div>
                 </form>
@@ -134,8 +137,12 @@ Coded by www.creative-tim.com
         })
         .then(response => {
           console.log(response);
-          alert(response.Mensaje)
-          location.href="Iniciar Sesión.html"
+          if(response.estado=="true"){
+            alert(response.Mensaje)
+            location.href="Iniciar Sesión.html"
+          }else if(response.estado=="false"){
+            document.getElementById('merror').innerHTML= response.Mensaje;
+          };
         });
     }
   </script>
