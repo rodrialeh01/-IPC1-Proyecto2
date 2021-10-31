@@ -9,6 +9,7 @@ from Usuario import Usuario
 from Publicacion import Publicacion
 from Propio import Propio
 from Publicaciones_Usuario import Publicaciones_Usuario
+from Reaccion import Reaccion
 
 # se crea una variable para poder crear la API
 app = Flask(__name__)
@@ -28,6 +29,9 @@ Propios = []
 
 #Se crea una lista de cantidad de publicaciones por usuario
 CPubsUser = []
+
+#Se crea una lista de reaciones de las publicaciones ("me gusta")
+Reacciones = []
 
 #Se define al usuario Administrador
 Usuarios.append(Usuario("Abner Cardona","M","admin","admin@ipc1.com","admin@ipc1"))
@@ -219,6 +223,7 @@ def CargarPublicaciones():
     global Propios
     global CPubsUser
     global PubUser
+    global Reacciones
     publis = request.json['publicaciones']
     listap = json.loads(publis)
     for i in listap:
@@ -233,6 +238,7 @@ def CargarPublicaciones():
             Publicaciones.append(nuevoi)
             PubUser.append(nuevoi)
             AsignarCantidadP(nuevoi.getUsuario())
+            Reacciones.append(Reaccion(nuevoi.getId(),0))
             Propios.append(Propio(authori,PubUser))
         videos = i.get('videos')
         for k in videos:
@@ -245,6 +251,7 @@ def CargarPublicaciones():
             Publicaciones.append(nuevov)
             AsignarCantidadP(nuevov.getUsuario())
             PubUser.append(nuevov)
+            Reacciones.append(Reaccion(nuevov.getId(),0))
             Propios.append(Propio(authorv,PubUser))
     return(jsonify({'Mensaje':'Se hizo correctamente la carga'}))
 
@@ -373,7 +380,8 @@ def PublicacionesInicio():
             'username': Publicaciones[i].getUsuario(),
             'date': Publicaciones[i].getFecha(),
             'category': Publicaciones[i].getCategoria(),
-            'url': Publicaciones[i].getUrl()
+            'url': Publicaciones[i].getUrl(),
+            'likes': likespub(Publicaciones[i].getId())
         }
         Datos.append(objeto)
     return(jsonify(Datos))
@@ -420,14 +428,84 @@ def PublicacionesUsuario(user):
                         'username': pub.getUsuario(),
                         'date': pub.getFecha(),
                         'category': pub.getCategoria(),
-                        'url':pub.getUrl()
+                        'url':pub.getUrl(),
+                        'likes': likespub(pub.getId())
                     }
                     Publis.append(objeto)
+            OrdenamientoReacciones(Publis)
             objeto = {
                 'username': Propio.getUsuario(),
                 'publicacion': Publis
             }
     return(jsonify(objeto))
+
+#RETORNAR LA CANTIDAD DE LIKES DE LA PUBLICACION
+def likespub(idp):
+    global Reacciones
+    for i in range(len(Reacciones)):
+        if(int(idp) == int(Reacciones[i].getIdpublicacion())):
+            return(Reacciones[i].getCantidad())
+
+#OBTENER REACCIONES
+@app.route('/Reacciones', methods=['GET'])
+def obtenerreacciones():
+    global Reacciones
+    OrdenamientoReacciones(Reacciones)
+    Datos = []
+    for r in Reacciones:
+        objeto = {
+            'id': r.getIdpublicacion(),
+            'likes': r.getCantidad()
+        }
+        Datos.append(objeto)
+    return(jsonify(Datos))
+
+#OBTENER EL TOP 5 DE PUBLICACIONES CON MÁS REACCIONES
+@app.route('/Publicaciones/Reacciones', methods=['GET'])
+def ObtenerTopReacciones():
+    global Reacciones
+    Datos = []
+    OrdenamientoReacciones(Reacciones)
+    objeto0 = {
+        'id': Reacciones[0].getIdpublicacion(),
+        'likes': Reacciones[0].getCantidad()
+    }
+    Datos.append(objeto0)
+    objeto1 = {
+        'id': Reacciones[1].getIdpublicacion(),
+        'likes': Reacciones[1].getCantidad()
+    }
+    Datos.append(objeto1)
+    objeto2 = {
+        'id': Reacciones[2].getIdpublicacion(),
+        'likes': Reacciones[2].getCantidad()
+    }
+    Datos.append(objeto2)
+    objeto3 = {
+        'id': Reacciones[3].getIdpublicacion(),
+        'likes': Reacciones[3].getCantidad()
+    }
+    Datos.append(objeto3)
+    objeto4 = {
+        'id': Reacciones[4].getIdpublicacion(),
+        'likes': Reacciones[4].getCantidad()
+    }
+    Datos.append(objeto4)
+    return(jsonify(Datos))
+
+#ORDENAMIENTO DE REACCIONES DE LIKES
+def OrdenamientoReacciones(arreglo):
+    try:
+        for i in range(1,len(arreglo)):
+            clave = arreglo[i]
+            j = i-1
+            while (j>=0 and arreglo[j].getCantidad() < clave.getCantidad()):
+                arreglo[j+1] = arreglo[j]
+                j = j-1
+            arreglo[j+1] = clave
+        return(arreglo)
+    except:
+        print('F')
 
 #RETORNA LA CANTIDAD DE PUBLICACIONES POR CADA USUARIO
 @app.route('/Publicaciones/Usuarios', methods=['GET'])
@@ -475,6 +553,25 @@ def OrdenamientoCPublicaciones(arreglo):
         return(arreglo)
     except:
         print('F')
+
+#AÑADIR 1 REACCION A 1 PUBLICACION
+@app.route('/Reaccion/Añadir', methods=['POST'])
+def Añadirlike():
+    global Reacciones
+    id = request.json['id']
+    like = request.json['like']
+    if(like =="True"):
+        AumentarLikes(id)
+        return(jsonify({'Mensaje':'Se dio like a la publicacion'}))
+
+#AUMENTAR LA CANTIDAD DE LIKES
+def AumentarLikes(idp):
+    global Reacciones
+    for re in Reacciones:
+        if (int(idp) == int(re.getIdpublicacion())):
+            aumento = int(re.getCantidad()) +1
+            re.setCantidad(int(aumento))
+            break
 
 #Hace que se levante la api que se esta creando
 if __name__ == "__main__":

@@ -74,9 +74,9 @@
             </a>
           </li>
           <li class="nav-item active">
-            <a class="nav-link" href="Graficas.html">
+            <a class="nav-link" href="Reportes.html">
               <i class="material-icons">analytics</i>
-              <p>Gráficas</p>
+              <p>Reportes</p>
             </a>
           </li>
           <!-- <li class="nav-item active-pro ">
@@ -127,7 +127,7 @@
                   <canvas id="grafica1" width="100" height="100"></canvas>
                 </div>
                 <div class="card-footer text-muted">
-                    <button type="button" class="btn btn-warning">Exportar PDF</button>
+                    <button type="button" class="btn btn-warning">Visualizar Reporte</button>
                 </div>
               </div>
               <br>
@@ -141,7 +141,7 @@
                 </div>
                 <div class="card-footer text-muted">
                     <form>
-                        <button id="rpt2" type="button" class="btn btn-success">Exportar PDF</button>
+                        <button id="rpt2" type="button" class="btn btn-success">Visualizar Reporte</button>
                     </form>
                 </div>
               </div>
@@ -348,24 +348,38 @@
   </script>
 </body>
 <script>
-    
+  function ObtenerTopR(){
     var ctx = document.getElementById('grafica1').getContext('2d');
-    var myChart = new Chart(ctx,{
-        type:"bar",
-        data:{
-            labels:['usuario1','usuario2','usuario3','usuario4','usuario5'],
-            datasets:[{
-                data:[10,9,15,13,2],
-                backgroundColor:[
-                    'rgb(66, 134, 244)',
-                    'rgb(74, 135, 72)',
-                    'rgb(229, 89, 50)',
-                    'rgb(74, 135, 72)',
-                    'rgb(66, 134, 244)'
-                ]
-            }]
-        },
-        options:{
+    fetch('http://localhost:3000/Publicaciones/Reacciones', {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+    }
+    })
+    .then(res => res.json())
+    .catch(err => {
+        console.error('Error:', err)
+        alert("Ocurrio un error, ver la consola")
+    })
+    .then(response => {
+        console.log(response); 
+        var myChart = new Chart(ctx,{
+            type:"bar",
+            data:{
+                labels:['Id: '+response[0].id,'Id: '+response[1].id,'Id: '+response[2].id,'Id: '+response[3].id,'Id: '+response[4].id],
+                datasets:[{
+                    data:[response[0].likes,response[1].likes,response[2].likes,response[3].likes,response[4].likes],
+                    backgroundColor:[
+                        'rgb(147, 46, 212)',
+                        'rgb(12, 134, 229)',
+                        'rgb(32, 195, 94)',
+                        'rgb(245,131,9)',
+                        'rgb(245,9,113)'
+                    ]
+                }]
+            },
+            options:{
             scales:{
                 yAxes:[{
                     ticks:{
@@ -374,14 +388,15 @@
                 }]
             }
         }
-    });
+        });
+        
+    })
+  }
+  ObtenerTopR()
 </script>
 <script>
     function GraficaPosts(){
-        const arreglo = []
         var ctx = document.getElementById('grafica2').getContext('2d');
-        var cadena = ''
-        var cadena1 = ''
         fetch('http://localhost:3000/Publicaciones/Usuarios', {
         method: 'GET',
         headers: {
