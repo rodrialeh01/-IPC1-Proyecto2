@@ -404,6 +404,35 @@ def PublicacionesInicio():
         Datos.append(objeto)
     return(jsonify(Datos))
 
+#RANKING DE PUBLICACIONES
+@app.route('/Ranking', methods=['GET'])
+def Ranking():
+    global Publicaciones
+    global Reacciones
+    Publis = []
+    OrdenamientoReacciones(Reacciones)
+    for i in range(len(Reacciones)):        
+        Publis.append(RetornarPubsR(Reacciones[i].getIdpublicacion(),i))
+    return(jsonify(Publis))
+
+#RETORNA EL ARREGLO DE PUBLICACIONES
+def RetornarPubsR(idp, top):
+    global Publicaciones
+    rank = int(top) +1
+    for Publicacion in Publicaciones:
+        if(int(idp) == int(Publicacion.getId())):
+            objeto = {
+                'id': Publicacion.getId(),
+                'type': Publicacion.getTipo(),
+                'username': Publicacion.getUsuario(),
+                'date': Publicacion.getFecha(),
+                'category': Publicacion.getCategoria(),
+                'url':Publicacion.getUrl(),
+                'likes': likespub(Publicacion.getId()),
+                'top': rank
+            }
+    return objeto
+
 #PUBLICAR UN POST
 @app.route('/Publicaciones/Nuevo', methods=['POST'])
 def NuevoPost():
@@ -436,22 +465,16 @@ def ultimap():
 def PublicacionesUsuario(user):
     global Publicaciones
     global Propios
+    global Reacciones
+    OrdenamientoReacciones(Reacciones)
     for Propio in Propios:
         if(Propio.getUsuario()==user):
             Publis = []
             for pub in Propio.getPublicacion():
                 if(pub.getUsuario() == user):
-                    objeto = {
-                        'id': pub.getId(),
-                        'type': pub.getTipo(),
-                        'username': pub.getUsuario(),
-                        'date': pub.getFecha(),
-                        'category': pub.getCategoria(),
-                        'url':pub.getUrl(),
-                        'likes': likespub(pub.getId())
-                    }
-                    Publis.append(objeto)
-            OrdenamientoReacciones(Publis)
+                    for i in range(len(Reacciones)):
+                        if(Reacciones[i].getIdpublicacion()== pub.getId()):
+                            Publis.append(RetornarPubsRU(Reacciones[i].getIdpublicacion(),i))
             objeto = {
                 'username': Propio.getUsuario(),
                 'publicacion': Publis
@@ -464,6 +487,24 @@ def likespub(idp):
     for i in range(len(Reacciones)):
         if(int(idp) == int(Reacciones[i].getIdpublicacion())):
             return(Reacciones[i].getCantidad())
+
+#RETORNA EL OBJETO DE PUBLICACIONES DEL USUARIO
+def RetornarPubsRU(idp, top):
+    global Publicaciones
+    rank = int(top) +1
+    for Publicacion in Publicaciones:
+        if(int(idp) == int(Publicacion.getId())):
+            objeto = {
+                'id': Publicacion.getId(),
+                'type': Publicacion.getTipo(),
+                'username': Publicacion.getUsuario(),
+                'date': Publicacion.getFecha(),
+                'category': Publicacion.getCategoria(),
+                'url':Publicacion.getUrl(),
+                'likes': likespub(Publicacion.getId()),
+                'top': rank
+            }
+    return objeto
 
 #OBTENER REACCIONES
 @app.route('/Reacciones', methods=['GET'])
