@@ -161,16 +161,41 @@ def ActualizarUsuario(usuario):
     contraseña = request.json['password']
     for i in range(len(Usuarios)):
         if usuario == Usuarios[i].getUser():
-            if cantidadpassword(request.json['password']) == True:
+            if VerificarPassword(request.json['password']) == True:
                 Usuarios[i].setUser(nusuario)
                 Usuarios[i].setNombre(nombre)
                 Usuarios[i].setGenero(genero.upper())
                 Usuarios[i].setCorreo(correo)
                 Usuarios[i].setContraseña(contraseña)
-                return jsonify({'Mensaje':'Se actulizó correctamente el usuario'})
+                ActualizarUPropio(usuario,nusuario)
+                Actualizarautor(usuario,nusuario)
+                Actualizaruscant(usuario,nusuario)
+                return jsonify({'Mensajea':'Se actulizó correctamente el usuario','Mensaje':'Se actulizó correctamente el usuario, inicia sesión de nuevo.','estado':'true'})
             else:
-                return jsonify({'Mensaje':'Su contraseña debe ser mayor a 8 caracteres'})
-    return jsonify({'Mensaje': 'No se encontró el usuario'})
+                return jsonify({'Mensajea':'Su contraseña debe ser mayor a 8 caracteres, contener un número y un símbolo','estado':'false'})
+    return jsonify({'Mensajea': 'No se encontró el usuario','estado':'false'})
+
+#ACTUALIZAR USUARIO EN PROPIO
+def ActualizarUPropio(user, nuser):
+    global Propios
+    for pro in Propios:
+        if (str(user) == str(pro.getUsuario())):
+            pro.setUsuario(nuser)
+            break
+
+#ACTUALIZAR AUTOR DE LA PUBLICACION
+def Actualizarautor(user, nuser):
+    global Publicaciones
+    for pu in Publicaciones:
+        if(str(user) == str(pu.getUsuario())):
+            pu.setUsuario(nuser)
+
+#ACTUALIZAR LISTADO DE CANTIDAD DE PUBLICACIONES
+def Actualizaruscant(user,nuser):
+    global CPubsUser
+    for cp in CPubsUser:
+        if(str(user) == str(cp.getUsuario())):
+            cp.setUsuario(nuser)
 
 #METODO PARA RETORNAR 1 USUARIO
 @app.route('/Usuarios/<string:user>', methods=['GET'])
@@ -187,13 +212,6 @@ def RetornarUsuario(user):
             }
             return(jsonify(objeto))
     return(jsonify({'Mensaje':'No se encuentra el usuario'}))
-
-#METODO PARA VERIFICAR LA LONGITUD DE LA CONTRASEÑA
-def cantidadpassword(passw):
-    if len(passw) >=8:
-        return True
-    else:
-        return False
 
 #METODO PARA LA CARGA MASIVA DE USUARIOS
 @app.route('/Usuarios/CargaMasiva', methods=['POST'])
@@ -404,6 +422,7 @@ def NuevoPost():
         PubUser.append(nuevo)
         AsignarCantidadP(username)
         Propios.append(Propio(username,PubUser))
+        Reacciones.append(Reaccion(nuevo.getId(),0))
         return jsonify({'Mensaje':'Publicación hecha con éxito'})
     return jsonify({'Mensaje': 'No se pudo realizar el POST'})
 

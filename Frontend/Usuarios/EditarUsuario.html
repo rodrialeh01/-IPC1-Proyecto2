@@ -175,6 +175,7 @@
                   </div>
                 </div>
               </div>
+              <h3 id="mensajee"></h3>
               <div class="card-footer">
                 <button type="submit" class="btn btn-fill btn-primary" onclick="Modificar()">Guardar</button>
               </div>
@@ -362,8 +363,13 @@
             })
             .then(response =>{
                 console.log(response);
-                alert(response.Mensaje)
-                location.href="Inicio.html"
+                if(response.estado == "true"){
+                  location.href="../Login/Iniciar Sesión.html";
+                  alert(response.Mensaje)
+                }else if(response.estado =="false"){
+                  document.getElementById('mensajee').innerHTML=response.Mensajea
+                }
+                
             })
         }
 
@@ -386,6 +392,7 @@
                 document.getElementById("gender").value = response.gender
                 document.querySelector('#email').value = response.email
                 document.querySelector('#password').value = response.password
+                document.querySelector('#username').value = response = usuario
                 document.getElementById('nombreu').innerHTML = usuario
             })
         }
