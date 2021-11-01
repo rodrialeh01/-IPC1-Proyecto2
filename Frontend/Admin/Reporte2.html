@@ -31,9 +31,9 @@
   <link href="assets/css/material-dashboard.css?v=2.1.0" rel="stylesheet" />
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="assets/demo/demo.css" rel="stylesheet" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.js"></script>
-  <script src="assets/js/html2pdf.bundle.min.js"></script>
-  <script src="assets/js/script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.4/jspdf.plugin.autotable.min.js"></script>
+
 </head>
 
 <body class="dark-edition">
@@ -44,49 +44,49 @@
 
         Tip 2: you can also add an image using data-image tag
     -->
-      <div class="logo"><a href="" class="simple-text logo-normal">
-        <img src="assets/img/logoa.png" alt="">
-        </a></div>
-      <div class="sidebar-wrapper">
-        <ul class="nav">
-          <li class="nav-item ">
-            <a class="nav-link" href="Admin_Principal.html">
-              <i class="material-icons">dashboard</i>
-              <p>Inicio</p>
+    <div class="logo"><a href="" class="simple-text logo-normal">
+      <img src="assets/img/logoa.png" alt="">
+    </a></div>
+  <div class="sidebar-wrapper">
+    <ul class="nav">
+      <li class="nav-item   ">
+        <a class="nav-link" href="Admin_Principal.html">
+          <i class="material-icons">dashboard</i>
+          <p>Inicio</p>
+        </a>
+      </li>
+      <li class="nav-item ">
+        <a class="nav-link" href="Carga_Masiva.html">
+          <i class="material-icons">note_add</i>
+          <p>Carga Masiva</p>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="TablaUsers.html">
+          <i class="material-icons">content_paste</i>
+          <p>Lista de Usuarios</p>
+        </a>
+      </li>
+      <li class="nav-item ">
+        <a class="nav-link" href="TablaPublicaciones.html">
+          <i class="material-icons">content_paste</i>
+          <p>Lista de Publicaciones</p>
+        </a>
+      </li>
+      <li class="nav-item active ">
+        <a class="nav-link" href="Reportes.html">
+          <i class="material-icons">analytics</i>
+          <p>Reportes</p>
+        </a>
+      </li>
+      <!-- <li class="nav-item active-pro ">
+            <a class="nav-link" href="./upgrade.html">
+                <i class="material-icons">unarchive</i>
+                <p>Upgrade to PRO</p>
             </a>
-          </li>
-          <li class="nav-item ">
-            <a class="nav-link" href="Carga_Masiva.html">
-              <i class="material-icons">note_add</i>
-              <p>Carga Masiva</p>
-            </a>
-          </li>
-          <li class="nav-item ">
-            <a class="nav-link" href="TablaUsers.html">
-              <i class="material-icons">content_paste</i>
-              <p>Lista de Usuarios</p>
-            </a>
-          </li>
-          <li class="nav-item ">
-            <a class="nav-link" href="TablaPublicaciones.html">
-              <i class="material-icons">content_paste</i>
-              <p>Lista de Publicaciones</p>
-            </a>
-          </li>
-          <li class="nav-item active">
-            <a class="nav-link" href="Reportes.html">
-              <i class="material-icons">analytics</i>
-              <p>Reportes</p>
-            </a>
-          </li>
-          <!-- <li class="nav-item active-pro ">
-                <a class="nav-link" href="./upgrade.html">
-                    <i class="material-icons">unarchive</i>
-                    <p>Upgrade to PRO</p>
-                </a>
-            </li> -->
-        </ul>
-      </div>
+        </li> -->
+    </ul>
+  </div>
     </div>
     <div class="main-panel">
       <!-- Navbar -->
@@ -103,6 +103,14 @@
           </button>
           <div class="collapse navbar-collapse justify-content-end">
             <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="Reportes.html">
+                      <i class="material-icons">arrow_back_ios</i>
+                      <p class="d-lg-none d-md-block">
+                        Regresar
+                      </p>
+                    </a>
+                </li>
               <li class="nav-item">
                 <a class="nav-link" href="../Login/Iniciar Sesión.html">
                   <i class="material-icons">door_back</i>
@@ -118,37 +126,37 @@
       <!-- End Navbar -->
       <div class="content">
         <div class="container-fluid">
-            <div class="card card-nav-tabs text-center">
-                <div class="card-header card-header-danger">
-                  <h3>Top 5 de posts con mas "me gusta"</h3>
-                </div>
-                <div class="card-body">
-                  <!-- INSERTAR GRAFICA DE BARRAS AQUI-->
-                  <canvas id="grafica1" width="100" height="100"></canvas>
-                </div>
-                <div class="card-footer text-muted">
-                    <button onclick="R1()" type="button" class="btn btn-warning">Visualizar Reporte</button>
-                </div>
-              </div>
-              <br>
-              <div id="g2" class="card card-nav-tabs text-center">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
                 <div class="card-header card-header-info">
-                  <h3>Top 5 de usuarios con mas posts</h3>
+                    <h4 class="card-title ">Top 5 de Usuarios con más Publicaciones</h4>
+                  <p class="card-category">UBlog</p>
+                  <form id="hola">
+                    <button id="rpt" onclick="textToPdf()" class="btn btn-success btn-sm">Exportar a PDF</button>
+                  </form>
                 </div>
                 <div class="card-body">
-                  <!-- INSERTAR GRAFICA DE PIE AQUI -->
-                  <canvas id="grafica2" width="100" height="100"></canvas>
-                </div>
-                <div class="card-footer text-muted">
-                    <form>
-                        <button onclick="R2()" type="button" class="btn btn-success">Visualizar Reporte</button>
-                    </form>
+                  <div class="table-responsive">
+                    <table class="table" id="tablar2">
+                      <thead class=" text-primary">
+                        <th>
+                            Posición
+                        </th>
+                        <th>
+                            Nombre de Usuario
+                        </th>
+                        <th>
+                            Cantidad de publicaciones
+                        </th>
+                      </thead>
+                      <tbody id="contenidotop2"></tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
+            </div>
           </div>
-        </div>
-          </div>
-        </div>
         </div>
       </div>
       <script>
@@ -158,7 +166,6 @@
       </script>
     </div>
   </div>
-  
   <!--   Core JS Files   -->
   <script src="assets/js/core/jquery.min.js"></script>
   <script src="assets/js/core/popper.min.js"></script>
@@ -171,20 +178,16 @@
   <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
   <!-- Chartist JS -->
   <script src="assets/js/plugins/chartist.min.js"></script>
+  <!-- TABLA DE USUARIOS -->
+  <script src="assets/js/TablaTop52.js"></script>
   <!--  Notifications Plugin    -->
   <script src="assets/js/plugins/bootstrap-notify.js"></script>
   <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="assets/js/material-dashboard.js?v=2.1.0"></script>
   <!-- Material Dashboard DEMO methods, don't include it in your project! -->
   <script src="assets/demo/demo.js"></script>
-  <script>
-    function R1(){
-      location.href="Reporte1.html"
-    }   
-    function R2(){
-      location.href="Reporte2.html"
-    }    
-  </script>
+  <!--<script src="assets/js/html2pdf.bundle.min.js"></script>  
+  -->
   <script>
     $(document).ready(function() {
       $().ready(function() {
@@ -347,97 +350,24 @@
       });
     });
   </script>
-  <script>
-    $(document).ready(function() {
-      // Javascript method's body can be found in assets/js/demos.js
-      md.initDashboardPageCharts();
-
-    });
-  </script>
 </body>
+<!-- SCRIPT PARA GENERAR PDF-->
 <script>
-  function ObtenerTopR(){
-    var ctx = document.getElementById('grafica1').getContext('2d');
-    fetch('http://localhost:3000/Publicaciones/Reacciones', {
-    method: 'GET',
-    headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-    }
-    })
-    .then(res => res.json())
-    .catch(err => {
-        console.error('Error:', err)
-        alert("Ocurrio un error, ver la consola")
-    })
-    .then(response => {
-        console.log(response); 
-        var myChart = new Chart(ctx,{
-            type:"bar",
-            data:{
-                labels:['Id: '+response[0].id,'Id: '+response[1].id,'Id: '+response[2].id,'Id: '+response[3].id,'Id: '+response[4].id],
-                datasets:[{
-                    data:[response[0].likes,response[1].likes,response[2].likes,response[3].likes,response[4].likes],
-                    backgroundColor:[
-                        'rgb(147, 46, 212)',
-                        'rgb(12, 134, 229)',
-                        'rgb(32, 195, 94)',
-                        'rgb(245,131,9)',
-                        'rgb(245,9,113)'
-                    ]
-                }]
-            },
-            options:{
-            scales:{
-                yAxes:[{
-                    ticks:{
-                        beginAtZero:true
-                    }
-                }]
-            }
-        }
-        });
-        
-    })
+  function textToPdf(){
+      var form = document.getElementById("hola")
+      form.addEventListener("submit",function(event){
+          event.preventDefault()
+          var doc = new jsPDF('l')
+          doc.autoTable({
+              html:'#tablar2',
+              rowPageBreak: 'auto',
+              styles: { overflow: 'ellipsize', cellWidth: 'wrap' },
+              columnStyles: { text: { cellWidth: 'auto' } },
+              horizontalPageBreak: true,
+              theme:'grid'
+          })
+          doc.save('Top5 de Usuarios con más Publicaciones.pdf')
+      })
   }
-  ObtenerTopR()
-</script>
-<script>
-    function GraficaPosts(){
-        var ctx = document.getElementById('grafica2').getContext('2d');
-        fetch('http://localhost:3000/Publicaciones/Usuarios', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-        }
-        })
-        .then(res => res.json())
-        .catch(err => {
-            console.error('Error:', err)
-            alert("Ocurrio un error, ver la consola")
-        })
-        .then(response => {
-            console.log(response); 
-            var myChart = new Chart(ctx,{
-                type:"pie",
-                data:{
-                    labels:[response[0].username,response[1].username,response[2].username,response[3].username,response[4].username],
-                    datasets:[{
-                        data:[response[0].cantidad,response[1].cantidad,response[2].cantidad,response[3].cantidad,response[4].cantidad],
-                        backgroundColor:[
-                            'rgb(147, 46, 212)',
-                            'rgb(12, 134, 229)',
-                            'rgb(32, 195, 94)',
-                            'rgb(245,131,9)',
-                            'rgb(245,9,113)'
-                        ]
-                    }]
-                }
-            });
-            
-        })
-    }
-    GraficaPosts()
 </script>
 </html>

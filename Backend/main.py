@@ -527,26 +527,31 @@ def ObtenerTopReacciones():
     Datos = []
     OrdenamientoReacciones(Reacciones)
     objeto0 = {
+        'posicion': '1',
         'id': Reacciones[0].getIdpublicacion(),
         'likes': Reacciones[0].getCantidad()
     }
     Datos.append(objeto0)
     objeto1 = {
+        'posicion': '2',
         'id': Reacciones[1].getIdpublicacion(),
         'likes': Reacciones[1].getCantidad()
     }
     Datos.append(objeto1)
     objeto2 = {
+        'posicion': '3',
         'id': Reacciones[2].getIdpublicacion(),
         'likes': Reacciones[2].getCantidad()
     }
     Datos.append(objeto2)
     objeto3 = {
+        'posicion': '4',
         'id': Reacciones[3].getIdpublicacion(),
         'likes': Reacciones[3].getCantidad()
     }
     Datos.append(objeto3)
     objeto4 = {
+        'posicion': '5',
         'id': Reacciones[4].getIdpublicacion(),
         'likes': Reacciones[4].getCantidad()
     }
@@ -574,26 +579,31 @@ def ObtenerPUsers():
     Datos = []
     OrdenamientoCPublicaciones(CPubsUser)
     objeto0 = {
+        'posicion': '1',
         'username': CPubsUser[0].getUsuario(),
         'cantidad': CPubsUser[0].getCantidad()
     }
     Datos.append(objeto0)
     objeto1 = {
+        'posicion': '2',
         'username': CPubsUser[1].getUsuario(),
         'cantidad': CPubsUser[1].getCantidad()
     }
     Datos.append(objeto1)
     objeto2 = {
+        'posicion': '3',
         'username': CPubsUser[2].getUsuario(),
         'cantidad': CPubsUser[2].getCantidad()
     }
     Datos.append(objeto2)
     objeto3 = {
+        'posicion': '4',
         'username': CPubsUser[3].getUsuario(),
         'cantidad': CPubsUser[3].getCantidad()
     }
     Datos.append(objeto3)
     objeto4 = {
+        'posicion': '5',
         'username': CPubsUser[4].getUsuario(),
         'cantidad': CPubsUser[4].getCantidad()
     }
