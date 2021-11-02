@@ -1,151 +1,281 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <link rel="icon" type="image/png" href="assets/img/logo2.png">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-        <title>UBlog</title>
-        <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
-        <meta name="viewport" content="width=device-width" />
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Your description">
+    <meta name="author" content="Your name">
 
-        <link href="assets/css/bootstrap.css" rel="stylesheet" />
-        <link href="assets/css/landing-page.css" rel="stylesheet"/>
+    <!-- OG Meta Tags to improve the way the post looks when you share the page on Facebook, Twitter, LinkedIn -->
+	<meta property="og:site_name" content="" /> <!-- website name -->
+	<meta property="og:site" content="" /> <!-- website link -->
+	<meta property="og:title" content=""/> <!-- title shown in the actual shared post -->
+	<meta property="og:description" content="" /> <!-- description shown in the actual shared post -->
+	<meta property="og:image" content="" /> <!-- image link, make sure it's jpg -->
+	<meta property="og:url" content="" /> <!-- where do you want your post to link to -->
+	<meta name="twitter:card" content="summary_large_image"> <!-- to have large image post format in Twitter -->
 
-        <!--     Fonts and icons     -->
-        <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400,300' rel='stylesheet' type='text/css'>
-        <link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
-    </head>
-    <body class="landing-page landing-page2">
-        <nav class="navbar navbar-transparent navbar-top" role="navigation">
+    <!-- Webpage Title -->
+    <title>UBlog</title>
+    
+    <!-- Styles -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@600&display=swap" rel="stylesheet">
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/fontawesome-all.css" rel="stylesheet">
+    <link href="assets/css/swiper.css" rel="stylesheet">
+	<link href="assets/css/magnific-popup.css" rel="stylesheet">
+	<link href="assets/css/styles.css" rel="stylesheet">
+	
+	<!-- Favicon  -->
+    <link rel="icon" href="assets/images/logo2.png">
+</head>
+<body data-spy="scroll" data-target=".fixed-top">
+    
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top navbar-dark">
+        <div class="container">
+            
+            <!-- Image Logo -->
+            <a class="navbar-brand logo-image" href="Principal.html"><img src="assets/images/logo4.png" alt="alternative"></a>  
+
+            <!-- Text Logo - Use this if you don't have a graphic logo -->
+            <!-- <a class="navbar-brand logo-text page-scroll" href="index.html">Spify</a> -->
+
+            <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link page-scroll" href="#header">Inicio<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link page-scroll" href="#strengths">Mision y Vision</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link page-scroll" href="#about">Acerca de</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link page-scroll" href="#contact">Contáctanos</a>
+                    </li>
+                </ul>
+            </div> <!-- end of navbar-collapse -->
+        </div> <!-- end of container -->
+    </nav> <!-- end of navbar -->
+    <!-- end of navigation -->
+
+
+    <!-- Header -->
+    <header id="header" class="header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="image-container">
+                        <img class="img-fluid" src="assets/images/logo4.png" alt="alternative">
+                    </div> <!-- end of image-container -->
+                </div> <!-- end of col -->
+                <div class="col-lg-6">
+                    <div class="text-container">
+                        <h3>Únete a una de las mejores plataforma de Blogs en el mundo</h3>
+                        <a class="btn-solid-lg page-scroll" href="../Login/Iniciar Sesión.html">Iniciar Sesión</a>
+                    </div> <!-- end of text-container -->
+                </div> <!-- end of col -->
+            </div> <!-- end of row -->
+        </div> <!-- end of container -->
+        <div class="services">
             <div class="container">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header">
-                    <button id="menu-toggle" type="button" class="navbar-toggle" data-toggle="collapse" data-target="#example">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar bar1"></span>
-                    <span class="icon-bar bar2"></span>
-                    <span class="icon-bar bar3"></span>
-                    </button>
-                    <a href="Principal.html">
-                        <div class="logo">
-                            <img src="assets/img/logop.png" alt="Creative Tim Logo">
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </nav>
-        <div class="wrapper">
-            <div class="parallax filter-gradient purple" data-color="purple">
-                <div class= "container">
-                    <div class="row">
-                        <div class="col-md-7  hidden-xs">
-                            <div class="parallax-image">
-                                <img src="assets/img/showcases/showcase-2/mac2.png"/>
+                <div class="row">
+                    <div class="col-lg-12">
+
+                        <!-- Card -->
+                        <div class="card">
+                            <div class="card-image">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Gran Capacidad de Usuarios</h5>
+                                <div class="card-text">Unete sin ningun problema, nuestro sistema es grande para ocupar bastantes usuarios</div>
                             </div>
                         </div>
-                        <div class="col-md-5">
-                            <div class="description text-center">
-                                <h2>El mejor sitio de Blogs al alcance del mundo</h2>
-                                <br>
-                                <h5>Registrate o inicia sesión con nosotros para poder interactuar en uno de los sitios mas geniales de internet.</h5>
-                                <div class="buttons">
-                                    <a href="../Login/Iniciar Sesión.html" class="btn btn-fill btn-neutral">
-                                    <i></i> Iniciar Sesión
-                                    </a>
-                                </div>
+                        <!-- end of card -->
+
+                        <!-- Card -->
+                        <div class="card">
+                            <div class="card-image">
+                                <i class="fas fa-globe"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Para todo el mundo</h5>
+                                <div class="card-text">Puedes registrarte con nosotros desde cualquier parte del mundo</div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="section section-gray section-clients">
-                <div class="container text-center">
-                    <h4 class="header-text">MISIÓN Y VISIÓN</h4>
-                </div>
-            </div>
-            <div class="section section-demo">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="demo-image">
-                                <img src="assets/img/m1.jpg" alt="">
+                        <!-- end of card -->
+
+                        <!-- Card -->
+                        <div class="card">
+                            <div class="card-image">
+                                <i class="fas fa-photo-video"></i>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Publica tu Post</h5>
+                                <div class="card-text">Puedes publicar tu post con nosotros enviando tu URL del contenido multimedia que quieres publicar</div>
                             </div>
                         </div>
-                        <div class="col-md-5 col-md-offset-1">
-                            <h4 class="header-text">MISIÓN</h4>
-                            <p>
-                                Nuestra misión es que los usuarios puedan interactuar por medio de publicaciones que lleguen a publicar y tener una comunidad sana por medio de nuestro servicio.
-                            </p>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-md-5">
-                            <h4 class="header-text">Visión</h4>
-                            <p>
-                                Llegar a un alcance muy grande de personas para que puedan disfutar e interactuar con nuestra pagina y termine siendo la preferida para jovenes universitarios de todo el mundo.
-                            </p>
-                        </div>
-                        <div class="col-md-6 col-md-offset-1">
-                            <div class="demo-image">
-                                <img src="assets/img/v1.webp" alt="">
+                        <!-- end of card -->
+
+                    </div> <!-- end of col -->
+                </div> <!-- end of row -->
+            </div> <!-- end of container -->
+        </div> <!-- end of services -->
+    </header> <!-- end of header -->
+    <!-- end of header -->
+
+    <!-- Strengths -->
+    <div id="strengths" class="basic-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <ul class="list-unstyled li-space-lg">
+                        <li class="media">
+                            <div class="bullet">M</div>
+                            <div class="media-body">
+                                <h4>Mision</h4>
+                                <p>Nuestra misión es poder brindar un blog accesible al mundo con capacidad de comunicar de forma sana la información que hoy en dia es importante en el mundo de la tecnología.</p>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="section section-features">
-                <div class="container">
-                    <h4 class="header-text text-center">Acerca de</h4>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <div class="card card-blue">
-                                <div class="text">
-                                    <h4>Nuestra Historia</h4>
-                                    <p>Este blog fue creado en el año 2021 por medio de un desarrollador quien tuvo la idea de que jovenes pudieran interactuar en una plataforma muy interactiva.</p>
-                                </div>
+                        </li>
+                        <li class="media">
+                            <div class="bullet">V</div>
+                            <div class="media-body">
+                                <h4>Vision</h4>
+                                <p>Nuestra Vision es ser una de las plataformas de blog mas famosas del mundo y poder tener comunidades geniales de personas quienes comparten su vida en imagenes, chistes, videos o informacion util para todos.</p>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="card card-blue">
-                                <h4>¿Quienes somos?</h4>
-                                <p>Somos un servicio de interacción social donde ofrecemos este servicio a todas las personas quienes quieren utilizarlo.</p>
+                        </li>
+                        <li class="media">
+                            <div class="bullet">O</div>
+                            <div class="media-body">
+                                <h4>Objetivos</h4>
+                                <p>Nuestro objetivo es poder crecer la comunidad de Universitarios en el mundo para que sean capaces de comunicar de forma interactiva en nuestra aplicacion.</p>
                             </div>
+                        </li>
+                    </ul>
+                </div> <!-- end of col-lg-12 -->
+            </div> <!-- end of row -->
+        </div> <!-- end of container -->
+    </div> <!-- end of basic-5 -->
+    <!-- end of strengths -->
+
+    <!-- About -->
+    <div id="about" class="basic-6">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="text-container bg-gray">
+                        <h2>Acerca de nosotros</h2>
+                        <p>El equipo se integra de una persona quien se encargó del desarrollo del full-stack development para brindarles una pagina de calidad.</p>
+                        <ul class="list-unstyled li-space-lg">
+                            <li class="media">
+                                <i class="fas fa-square"></i>
+                                <div class="media-body">Creado en 2021.</div>
+                            </li>
+                            <li class="media">
+                                <i class="fas fa-square"></i>
+                                <div class="media-body">Desde Guatemala para el mundo.</div>
+                            </li>
+                        </ul>
+                    </div> <!-- end of text-container -->
+                    <div class="image-container">
+                        <img class="img-fluid" src="assets/images/fondoPortada2.jpg" alt="alternative">
+                    </div> <!-- end of image-container -->
+                </div> <!-- end of col -->
+            </div> <!-- end of row -->
+        </div> <!-- end of container -->
+    </div> <!-- end of basic-6 -->
+    <!-- end of about -->
+
+    <!-- Contact -->
+    <div id="contact" class="form-1">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Contáctanos</h2>
+                    <p class="p-heading">No es necesario que nos llames, puedes contactarnos desde el siguiente medio</p>
+                    <ul class="list-unstyled li-space-lg">
+                        <li><i class="fas fa-map-marker-alt"></i> &nbsp;Guatemala</li>
+                        <li><i class="fas fa-envelope"></i> &nbsp;<a href="">support@ublog.com</a></li>
+                    </ul>
+                </div> <!-- end of col -->
+            </div> <!-- end of row -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <!-- Contact Form -->
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <input type="text" class="form-control-input" id="cname" required>
+                            <label class="label-control" for="cname">Name</label>
                         </div>
-                        <div class="col-md-3">
-                            <div class="card card-blue">
-                                <h4>Nuestro equipo</h4>
-                                <p>Por el momento solo se encuentra un desaroolador FullStack que es encargado del control de toda esta pagina.</p>
-                            </div>
+                        <div class="form-group">
+                            <input type="email" class="form-control-input" id="cemail" required>
+                            <label class="label-control" for="cemail">Email</label>
                         </div>
-                        <div class="col-md-3">
-                            <div class="card card-blue">
-                                <h4>Opiniones de nuestros Clientes</h4>
-                                <p>"Esta pagina es genial, nunca habia visto tanta facilidad en manejar mi blog como en esta pagina"</p>
-                                <p>Fuano</p>
-                            </div>
+                        <div class="form-group">
+                            <button type="submit" class="form-control-submit-button">Enviar</button>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <footer class="footer">
-                <div class="container">
-                    <nav class="pull-left">
-                        <p>Contactános: sopport@ublog.com</p>
-                        <p>Desarrollado por: Rodrigo Alejandro Hernández de León</p>
-                        <p>Carnet: 201900042</p>
-                        <p>Esctudiante de la carrera de Ingenieria en Ciencias y Sistemas, USAC</p>
-                    </nav>
-                    <div class="copyright">
-                        &copy; 2021 Rodrigo Hernández</a>
-                    </div>
-                </div>
-            </footer>
-        </div>
-    </body>
-    <script src="assets/js/jquery-1.10.2.js" type="text/javascript"></script>
-    <script src="assets/js/jquery-ui-1.10.4.custom.min.js" type="text/javascript"></script>
-    <script src="assets/js/bootstrap.js" type="text/javascript"></script>
-    <script src="assets/js/awesome-landing-page.js" type="text/javascript"></script>
+                    </form>
+                    <!-- end of contact form -->
+
+                </div> <!-- end of col -->
+            </div> <!-- end of row -->
+        </div> <!-- end of container -->
+    </div> <!-- end of form-1 -->
+    <!-- end of contact -->
+
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="footer-col first">
+                        <h6>About U-Blog</h6>
+                        <p class="p-small">UBlog es una plataforma enfocada mas a la juventud del mundo que le guste interactuar.</p>
+                    </div> <!-- end of footer-col -->
+                    <div class="footer-col second">
+                        <h6>Informacion</h6>
+                        <ul class="list-unstyled li-space-lg p-small">
+                            <li>Nombre: Rodrigo Alejandro Hernández de León</li>
+                            <li>Carnet: 201900042</li>
+                            <li>Curso: Introducción a la Programación y Computación 1</li>
+                            <li>Seccion: D</li>
+                            <li>Universidad de San Carlos de Guatemala</li>
+                            <li>Proyecto 2</li>
+                        </ul>
+                    </div> <!-- end of footer-col -->
+                    <div class="footer-col third">
+                        <span class="fa-stack">
+                            <a href="https://github.com/rodrialeh01">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-github fa-stack-1x"></i>
+                            </a>
+                        </span>
+                        </span>
+                        <p class="p-small">Contáctame desde github <a href=""><strong>support@ublog.com</strong></a></p>
+                    </div> <!-- end of footer-col -->
+                </div> <!-- end of col -->
+            </div> <!-- end of row -->
+        </div> <!-- end of container -->
+    </div> <!-- end of footer -->  
+    <!-- end of footer -->
+    	
+    <!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script> <!-- jQuery for Bootstrap's JavaScript plugins -->
+    <script src="assets/js/bootstrap.min.js"></script> <!-- Bootstrap framework -->
+    <script src="assets/js/jquery.easing.min.js"></script> <!-- jQuery Easing for smooth scrolling between anchors -->
+    <script src="assets/js/swiper.min.js"></script> <!-- Swiper for image and text sliders -->
+    <script src="assets/js/jquery.magnific-popup.js"></script> <!-- Magnific Popup for lightboxes -->
+    <script src="assets/js/scripts.js"></script> <!-- Custom scripts -->
+</body>
 </html>
