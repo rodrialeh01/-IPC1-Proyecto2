@@ -287,9 +287,31 @@ def EliminarUsuario(user):
     global Usuarios
     for i in range(len(Usuarios)):
         if user == Usuarios[i].getUser():
+            EliPropiosUser(Usuarios[i].getUser())
+            EliPubU(Usuarios[i].getUser())
+            EliminarUsCantidad(Usuarios[i].getUser())
             del Usuarios[i]
             return jsonify({'Mensaje':'Se eliminó el usuario exitosamente'})
     return jsonify({'Mensaje':'No se encontró el usuario'})
+
+#ELIMINA LAS PUBLICACIONES QUE CONTENIA EL USUARIO
+def EliPubU(user):
+    global Publicaciones
+    for i in Publicaciones:
+        if(user == i.getUsuario()):
+            Publicaciones.remove(i)
+
+def EliPropiosUser(user):
+    global Propios
+    for i in Propios:
+        if(user == i.getUsuario()):
+            Propios.remove(i)
+
+def EliminarUsCantidad(user):
+    global CPubsUser
+    for i in CPubsUser:
+        if(user == i.getUsuario()):
+            CPubsUser.remove(i)
 
 #METODO PARA RETORNAR LA CANTIDAD DE USUARIOS
 @app.route('/Usuarios/Contador',methods=['GET'])
