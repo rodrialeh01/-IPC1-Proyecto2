@@ -243,33 +243,33 @@ def CargarPublicaciones():
     global Reacciones
     publis = request.json['publicaciones']
     listap = json.loads(publis)
-    for i in listap:
-        imagenes = i.get('images')
-        for j in imagenes:
-            l= len(Publicaciones) +1
-            urli = j.get('url')
-            datei = j.get('date')
-            categoryi = j.get('category')
-            authori = j.get('author')
-            nuevoi = Publicacion(l,"Imagen",authori,urli,datei,categoryi)
-            Publicaciones.append(nuevoi)
-            PubUser.append(nuevoi)
-            AsignarCantidadP(nuevoi.getUsuario())
-            Reacciones.append(Reaccion(nuevoi.getId(),0))
-            Propios.append(Propio(authori,PubUser))
-        videos = i.get('videos')
-        for k in videos:
-            m= len(Publicaciones)+1
-            urlv = k.get('url')
-            datev = k.get('date')
-            categoryv = k.get('category')
-            authorv = k.get('author')
-            nuevov = Publicacion(m,"Video",authorv,urlv,datev,categoryv)
-            Publicaciones.append(nuevov)
-            AsignarCantidadP(nuevov.getUsuario())
-            PubUser.append(nuevov)
-            Reacciones.append(Reaccion(nuevov.getId(),0))
-            Propios.append(Propio(authorv,PubUser))
+    #for i in listap:
+    imagenes = listap.get('images')
+    for j in imagenes:
+        l= len(Publicaciones) +1
+        urli = j.get('url')
+        datei = j.get('date')
+        categoryi = j.get('category')
+        authori = j.get('author')
+        nuevoi = Publicacion(l,"Imagen",authori,urli,datei,categoryi)
+        Publicaciones.append(nuevoi)
+        PubUser.append(nuevoi)
+        AsignarCantidadP(nuevoi.getUsuario())
+        Reacciones.append(Reaccion(nuevoi.getId(),0))
+        Propios.append(Propio(authori,PubUser))
+    videos = listap.get('videos')
+    for k in videos:
+        m= len(Publicaciones)+1
+        urlv = k.get('url')
+        datev = k.get('date')
+        categoryv = k.get('category')
+        authorv = k.get('author')
+        nuevov = Publicacion(m,"Video",authorv,urlv,datev,categoryv)
+        Publicaciones.append(nuevov)
+        AsignarCantidadP(nuevov.getUsuario())
+        PubUser.append(nuevov)
+        Reacciones.append(Reaccion(nuevov.getId(),0))
+        Propios.append(Propio(authorv,PubUser))
     return(jsonify({'Mensaje':'Se hizo correctamente la carga'}))
 
 #ASIGNA LA CANTIDAD DE PUBLICACIONES POR CADA USUARIO
