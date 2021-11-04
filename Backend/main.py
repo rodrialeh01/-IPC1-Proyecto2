@@ -300,6 +300,7 @@ def EliPubU(user):
     for i in Publicaciones:
         if(user == i.getUsuario()):
             Publicaciones.remove(i)
+            EliminPubliRe(i.getId())
 
 def EliPropiosUser(user):
     global Propios
@@ -312,6 +313,12 @@ def EliminarUsCantidad(user):
     for i in CPubsUser:
         if(user == i.getUsuario()):
             CPubsUser.remove(i)
+
+def EliminPubliRe(idpub):
+    global Reacciones
+    for r in Reacciones:
+        if(idpub == r.getIdpublicacion()):
+            Reacciones.remove(r)
 
 #METODO PARA RETORNAR LA CANTIDAD DE USUARIOS
 @app.route('/Usuarios/Contador',methods=['GET'])
@@ -383,6 +390,7 @@ def EliminarPublicacion(idP):
         if idP == Publicaciones[i].getId():
             descontarPubs(Publicaciones[i].getUsuario())
             eliminarpubuser(Publicaciones[i].getId(), Publicaciones[i].getUsuario())
+            EliminPubliRe(Publicaciones[i].getId())
             del Publicaciones[i]            
             return jsonify({'Mensaje':'Se eliminó la publicacion exitosamente'})
     return jsonify({'Mensaje':'No se encontró la publicacion'})
@@ -406,6 +414,7 @@ def eliminarpubuser(idp, user):
     for p in Propios:
         if(p.getUsuario() == user):
             p.setPublicacion(PubUser)
+
 
 #METODO PARA RETORNAR LAS PUBLICACIONES Y MOSTRARLAS EN EL BACKEND DE INICIO
 @app.route('/Publicaciones/Inicio', methods=['GET'])
@@ -452,7 +461,7 @@ def RetornarPubsR(idp, top):
                 'likes': likespub(Publicacion.getId()),
                 'top': rank
             }
-    return objeto
+            return objeto
 
 #PUBLICAR UN POST
 @app.route('/Publicaciones/Nuevo', methods=['POST'])
