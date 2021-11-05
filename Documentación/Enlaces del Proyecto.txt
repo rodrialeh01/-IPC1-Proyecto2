@@ -1,0 +1,4 @@
+GITHUB del Backend: https://github.com/rodrialeh01/IPC1_BackendProyecto2_201900042.git
+Pagina del Backend: https://backendp2-201900042.herokuapp.com
+GITHUB del Frontend: https://github.com/rodrialeh01/IPC1_FrontendProyecto2_201900042.git
+Pagina del Frontend: https://ublog-201900042.herokuapp.com
