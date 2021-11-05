@@ -9,5 +9,7 @@ Desarrollado en Python el funcionamiento de la parte lógica de la API.
 Desarrollado y tomando algunas plantillas con el uso de HTML, CSS y JavaScript.
 
 ## Cloud:
-El proyecto su backend esta levantada en: https://backendp2-201900042.herokuapp.com
-Y la pagina principal vista desde el Frontend es: https://ublog-201900042.herokuapp.com
+El proyecto esta levantado en la plataforma de Heroku
+| Backend | https://backendp2-201900042.herokuapp.com	|
+|---------|-------------|
+| Frontend | https://ublog-201900042.herokuapp.com	|
