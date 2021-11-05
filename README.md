@@ -14,7 +14,7 @@ El proyecto esta levantado en la plataforma de Heroku
 |---------|-------------|
 | Frontend | https://ublog-201900042.herokuapp.com	|
 
-##Repositorios Github
+## Repositorios Github:
 El proyecto esta levantado en la plataforma de Heroku
 | Backend | https://github.com/rodrialeh01/IPC1_BackendProyecto2_201900042.git	|
 |---------|-------------|
